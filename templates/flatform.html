@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动化测试平台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            background-color: #333;
+            color: #fff;
+            width: 250px;
+            height: 100%;
+            position: fixed;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #444;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar li:hover {
+            background-color: #444;
+        }
+        .sidebar .submenu {
+            display: none;
+            background-color: #555;
+        }
+        .sidebar .submenu li {
+            padding-left: 40px;
+        }
+        .sidebar .submenu li:hover {
+            background-color: #666;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+        }
+        .logout {
+            padding: 15px 20px;
+            border-top: 1px solid #444;
+            cursor: pointer;
+            text-align: center;
+        }
+        .logout:hover {
+            background-color: #444;
+        }
+        .main-title {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li onclick="location.href='/tools'">工具 <span>∨</span></li>
+            <li onclick="location.href='/config'">环境配置 <span>∨</span></li>
+            <li onclick="toggleSubmenu('automation')">自动化测试 <span>∨</span></li>
+            <ul class="submenu" id="automation">
+                <li onclick="location.href='/automation/interface'">接口管理</li>
+                <li onclick="location.href='/automation/cases'">测试用例</li>
+                <li onclick="location.href='/automation/reports'">测试报告</li>
+            </ul>
+            <li onclick="toggleSubmenu('system')">系统管理 <span>∨</span></li>
+            <ul class="submenu" id="system">
+                <li onclick="location.href='/system/account'">账号管理</li>
+            </ul>
+        </ul>
+        <div class="logout" onclick="location.href='/logout'">退出</div>
+    </div>
+    <div class="content">
+        <h2 class="main-title">{{ content }}</h2>
+    </div>
+
+    <script>
+        function toggleSubmenu(submenuId) {
+            var submenu = document.getElementById(submenuId);
+            var icon = submenu.previousElementSibling.querySelector('span');
+            if (submenu.style.display === 'block') {
+                submenu.style.display = 'none';
+                icon.textContent = '∨';
+            } else {
+                submenu.style.display = 'block';
+                icon.textContent = '∧';
+            }
+        }
+    </script>
+</body>
+</html>
