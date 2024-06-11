@@ -34,6 +34,14 @@ def submit():
 def automation_interface():
     return render_template('test_case.html', content="接口管理页面内容")
 
+# @simple.route('/test_case')
+# def test_case():
+#     return  render_template('index.html')
+
+# @simple.route('/project_environment')
+# def project_environment():
+#     return render_template('project_environment.html')
+
 @simple.route('/static_page')
 def static_page():
     return send_from_directory('static', 'static_page.html')

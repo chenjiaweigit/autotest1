@@ -43,6 +43,14 @@ def report():
 
     return app.send_static_file('report/index.html')
 
+@app.route('/test_case')
+def test_case():
+    return  render_template('index.html')
+
+@app.route('/project_environment')
+def project_environment():
+    return render_template('project_environment.html')
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
