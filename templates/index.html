@@ -6,7 +6,7 @@
 <div class="test-case-wrap">
     <button class="layui-btn layui-btn-normal submit-btn" lay-event="getCheckData">提交</button>
     <div class="layui-btn-container" style="margin-top: 20px; padding-left: 20px">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-on="add-data">新增</button>
         <button class="layui-btn layui-btn-sm" lay-event="getData">编辑</button>
         <button class="layui-btn layui-btn-sm layui-bg-red" lay-event="getData">删除</button>
         <button class="layui-btn layui-btn-sm" id="dropdownButton">
@@ -15,18 +15,114 @@
         </button>
     </div>
     <table class="layui-hide" id="ID-table-demo-parse"></table>
+
+    <div id="add-main" style="display: none;">
+        <form class="layui-form" id="add-form" action="">
+            <div class="layui-form-item center">
+                <label class="layui-form-label" style="width: 100px">用例编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseNo" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="请输入用例编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">模块名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="templateName" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入模块名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">用例名称&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseName" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入用例名称" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求方式&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求方式" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求地址&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求地址" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求参数&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="params" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求参数" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">成功断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="success" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入成功断言" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">状态码断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="status" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入状态码断言" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">内容断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="content" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入内容断言" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">非空断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="notEmpty" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入非空断言" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+<script type="text/html" id="toolEventDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
 <script src="static/layui/2.9.10/layui/layui.js"></script>
 
 <script>
+    var dataList = [];
+
     layui.use('table', function () {
         var table = layui.table;
 
         // 渲染
         table.render({
             elem: '#ID-table-demo-parse',
-            url: 'static/data.json',
+            // url: 'static/data.json',
+            data: dataList,
             page: true,
             response: {
                 statusCode: 200   // 重新规定成功的状态码为 200，table 组件默认为 0
@@ -52,28 +148,85 @@
             cols: [[
                 { field: 'caseNo', title: '用例编号', width: 120 },
                 { field: 'templateName', title: '模块名称', width: 150 },
-                { field: 'caseName', title: '用例名称', width: 100, sort: true },
-                { field: 'type', title: '请求方式', width: 80, sort: true },
+                { field: 'caseName', title: '用例名称', width: 120 },
+                { field: 'type', title: '请求方式', width: 120 },
                 { field: 'address', title: '请求地址' },
                 { field: 'params', title: '请求参数', width: 120 },
                 { field: 'success', title: '成功断言', width: 120 },
                 { field: 'status', title: '状态码断言', width: 120 },
                 { field: 'content', title: '内容断言', width: 120 },
-                { field: 'NotEmpty', title: '非空断言', width: 120 }
+                { field: 'notEmpty', title: '非空断言', width: 120 },
+                { title: '操作', width: 160, templet: '#toolEventDemo' }
             ]],
             height: 315
         });
-    });
-</script>
 
-<script src="static/layui/2.9.10/layui/layui.js"></script>
-<script>
+        // 单元格工具事件
+        table.on('tool(ID-table-demo-parse)', function (obj) {
+            var data = obj.data; // 得到当前行数据
+            var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
+            var index = obj.index; // 得到当前行索引
+            var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
+            var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
+            var options = obj.config; // 获取当前表格基础属性配置项
+            var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.3 新增
+            console.log(obj); // 查看对象所有成员
+
+            // 根据 lay-event 的值执行不同操作
+            if (layEvent === 'del') { //删除
+                layer.confirm('确定删除吗？', function (index) {
+                    console.log("ssss")
+                    // obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
+                    // layer.close(index);
+
+                    // 向后端发送删除请求，执行完毕后，可通过 reloadData 方法完成数据重载
+                    /*
+                    table.reloadData(id, {
+                      scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                    });
+                    */
+                });
+            } else if (layEvent === 'edit') { //编辑
+                console.log("eeee")
+                // do something
+                // 当发送后端请求成功后，可再通过 reloadData 方法完成数据重载
+                /*
+                table.reloadData(id, {
+                  scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                });
+                */
+            }
+        });
+    });
+
     //JS
     layui.use(['element', 'layer', 'util'], function () {
         var element = layui.element;
         var layer = layui.layer;
         var util = layui.util;
         var $ = layui.$;
+
+        // 事件
+        util.on('lay-on', {
+            'add-data': function () {
+                layer.open({
+                    type: 1,
+                    shade: 0,
+                    // area: ['420px', '240px'], // 宽高
+                    title: "新建用例",
+                    // closeBtn: false,
+                    // shift: 2,
+                    area: ['400px', '650px'],
+                    // shadeClose: true,
+                    // btn: ['新增', '取消'],
+                    // btnAlign: 'c',
+                    content: $("#add-main"),
+                    success: function (layero, index) { },
+                    yes: function () {
+                    }
+                });
+            },
+        })
 
         //头部事件
         util.event('lay-header-event', {
@@ -94,6 +247,77 @@
             }
         });
     });
+
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form;
+        //表单验证
+        // form.verify({
+        //     firstpwd: [/(.+){6,12}$/, '密码必须6到12位'],
+        //     secondpwd: function (value) {
+        //         if (value != $("#firstpwd").val()) {
+        //             $("#secondpwd").val("");
+        //             return '确认密码与密码不一致';
+        //         }
+        //     },
+        //     productCodes: function (value) {
+        //         if (value == '') {
+        //             return "请选择系统分配";
+        //         }
+        //     },
+        //     sysqx: function (value) {
+        //         if (value == '') {
+        //             return "请选择权限";
+        //         }
+        //     }
+        // });
+        //提交监听事件
+        form.on('submit(save)', function (data) {
+            params = data.field;
+            //alert(JSON.stringify(params))
+            submit($, params);
+            return false;
+        })
+        var obj = document.getElementById('closeBtn');
+        obj.addEventListener('click', function cancel() {
+            CloseWin();
+        });
+    })
+    //提交
+    function submit($, params) {
+        console.log("hahah",params)
+        // $.post('${ctx}/golbal/add1', params, function (res) {
+        //     if (res.status == 1) {
+        //         layer.msg(res.message, { icon: 1 }, function (index) {
+        //             CloseWin();
+        //         })
+        //     } else if (res.status == 2) {
+        //         layer.msg(res.message, { icon: 0 }, function () {
+        //             parent.location.href = '${ctx}/golbal/main';
+        //             CloseWin();
+        //         })
+        //     } else {
+        //         layer.msg(res.message, { icon: 0 }, function () {
+        //             location.reload(); // 页面刷新
+        //             return false
+        //         })
+        //     }
+        // }, 'json');
+
+        dataList.push(params)
+        layer.msg('新增成功！', { icon: 1 }, function (index) {
+            CloseWin();
+        })
+        
+    }
+    //关闭页面
+    function CloseWin() {
+        parent.location.reload(); // 父页面刷新
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭 
+    }
+
 </script>
 
 {% endblock %}
