@@ -7,12 +7,11 @@
     <button class="layui-btn layui-btn-normal submit-btn" lay-event="getCheckData">提交</button>
     <div class="layui-btn-container" style="margin-top: 20px; padding-left: 20px">
         <button class="layui-btn layui-btn-sm" lay-on="add-data">新增</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getData">编辑</button>
         <button class="layui-btn layui-btn-sm layui-bg-red" lay-event="getData">删除</button>
-        <button class="layui-btn layui-btn-sm" id="dropdownButton">
+        <!-- <button class="layui-btn layui-btn-sm" id="dropdownButton">
             下拉按钮
             <i class="layui-icon layui-icon-down layui-font-12"></i>
-        </button>
+        </button> -->
     </div>
     <table class="layui-hide" id="ID-table-demo-parse"></table>
 
@@ -37,7 +36,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="caseName" required style="width: 240px" lay-verify="required"
                         placeholder="请输入用例名称" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -45,7 +43,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="type" required style="width: 240px" lay-verify="required"
                         placeholder="请输入请求方式" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -53,7 +50,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="address" required style="width: 240px" lay-verify="required"
                         placeholder="请输入请求地址" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -61,7 +57,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="params" required style="width: 240px" lay-verify="required"
                         placeholder="请输入请求参数" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -69,7 +64,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="success" required style="width: 240px" lay-verify="required"
                         placeholder="请输入成功断言" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -77,7 +71,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="status" required style="width: 240px" lay-verify="required"
                         placeholder="请输入状态码断言" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -85,7 +78,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="content" required style="width: 240px" lay-verify="required"
                         placeholder="请输入内容断言" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
@@ -93,12 +85,98 @@
                 <div class="layui-input-block">
                     <input type="text" name="notEmpty" required style="width: 240px" lay-verify="required"
                         placeholder="请输入非空断言" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input"> -->
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="edit-main" style="display: none;">
+        <form class="layui-form" id="edit-form" lay-filter="updata"  action="">
+            <div class="layui-form-item center" style="display: none;">
+                <label class="layui-form-label" style="width: 100px">id</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item center">
+                <label class="layui-form-label" style="width: 100px">用例编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseNo" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="请输入用例编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">模块名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="templateName" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入模块名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">用例名称&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseName" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入用例名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求方式&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求方式" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求地址&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求参数&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="params" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求参数" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">成功断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="success" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入成功断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">状态码断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="status" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入状态码断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">内容断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="content" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入内容断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">非空断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="notEmpty" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入非空断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="editSave">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
                 </div>
             </div>
@@ -111,9 +189,18 @@
 </script>
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
 <script src="static/layui/2.9.10/layui/layui.js"></script>
-
+<script src="https://cdn.bootcdn.net/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script>
+    const { v4: uuidv4 } = uuid;
     var dataList = [];
+    var rowData = {};
+    const tempDataList = localStorage.getItem('dataList')
+    if (tempDataList === null) {
+        localStorage.setItem('dataList', JSON.stringify(dataList))
+    } else {
+        const tempDataList1 = JSON.parse(tempDataList)
+        dataList = tempDataList1
+    }
 
     layui.use('table', function () {
         var table = layui.table;
@@ -136,16 +223,8 @@
                     "data": res.rows.item //解析数据列表
                 };
             },
-            // cols: [[
-            //     { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true },
-            //     { field: 'username', title: '用户名', width: 120 },
-            //     { field: 'email', title: '邮箱', width: 150 },
-            //     { field: 'experience', title: '积分', width: 100, sort: true },
-            //     { field: 'sex', title: '性别', width: 80, sort: true },
-            //     { field: 'sign', title: '签名' },
-            //     { field: 'joinTime', title: '加入时间', width: 120 }
-            // ]],
             cols: [[
+                { field: 'id', title: 'id', width: 120 },
                 { field: 'caseNo', title: '用例编号', width: 120 },
                 { field: 'templateName', title: '模块名称', width: 150 },
                 { field: 'caseName', title: '用例名称', width: 120 },
@@ -175,26 +254,36 @@
             // 根据 lay-event 的值执行不同操作
             if (layEvent === 'del') { //删除
                 layer.confirm('确定删除吗？', function (index) {
-                    console.log("ssss")
-                    // obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
-                    // layer.close(index);
-
-                    // 向后端发送删除请求，执行完毕后，可通过 reloadData 方法完成数据重载
-                    /*
-                    table.reloadData(id, {
-                      scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
-                    });
-                    */
+                    obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
+                    const targetIndex = dataList.findIndex(i=> i.id === obj.id)
+                    dataList.splice(targetIndex,1)
+                    localStorage.setItem('dataList', JSON.stringify(dataList))
+                    layer.close(index);
+                    layer.msg('删除成功！', { icon: 1 }, function (index) {
+                        // location.reload();
+                        // CloseWin();
+                        // 让table重新渲染
+                        table.reloadData('ID-table-demo-parse', {
+                            scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                        });
+                    })
                 });
             } else if (layEvent === 'edit') { //编辑
-                console.log("eeee")
-                // do something
-                // 当发送后端请求成功后，可再通过 reloadData 方法完成数据重载
-                /*
-                table.reloadData(id, {
-                  scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                // console.log("eeee")
+                rowData = data
+                layui.form.val('updata',data)
+                layer.open({
+                    type: 1,
+                    shade: 0,
+                    // area: ['420px', '240px'], // 宽高
+                    title: "编辑用例",
+                    area: ['400px', '650px'],
+                    content: layui.$("#edit-main"),
+                    success: function (layero, index) { },
+                    yes: function () {
+                    }
                 });
-                */
+
             }
         });
     });
@@ -272,11 +361,17 @@
         //         }
         //     }
         // });
-        //提交监听事件
+
+        //新增提交监听事件
         form.on('submit(save)', function (data) {
             params = data.field;
-            //alert(JSON.stringify(params))
             submit($, params);
+            return false;
+        })
+        //编辑
+        form.on('submit(editSave)', function (data) {
+            params = data.field;
+            editSubmit($, params);
             return false;
         })
         var obj = document.getElementById('closeBtn');
@@ -286,30 +381,27 @@
     })
     //提交
     function submit($, params) {
-        console.log("hahah",params)
-        // $.post('${ctx}/golbal/add1', params, function (res) {
-        //     if (res.status == 1) {
-        //         layer.msg(res.message, { icon: 1 }, function (index) {
-        //             CloseWin();
-        //         })
-        //     } else if (res.status == 2) {
-        //         layer.msg(res.message, { icon: 0 }, function () {
-        //             parent.location.href = '${ctx}/golbal/main';
-        //             CloseWin();
-        //         })
-        //     } else {
-        //         layer.msg(res.message, { icon: 0 }, function () {
-        //             location.reload(); // 页面刷新
-        //             return false
-        //         })
-        //     }
-        // }, 'json');
-
+        const id = uuidv4()
+        params.id = id
         dataList.push(params)
+        localStorage.setItem('dataList', JSON.stringify(dataList))
         layer.msg('新增成功！', { icon: 1 }, function (index) {
+            location.reload();
             CloseWin();
         })
-        
+
+    }
+    //编辑提交
+    function editSubmit($, params) {
+        const id = params.id;
+        let targetIndex = dataList.findIndex(i=>i.id === id);
+        dataList[targetIndex] = params
+        localStorage.setItem('dataList', JSON.stringify(dataList))
+        layer.msg('编辑成功！', { icon: 1 }, function (index) {
+            location.reload();
+            CloseWin();
+        })
+
     }
     //关闭页面
     function CloseWin() {
