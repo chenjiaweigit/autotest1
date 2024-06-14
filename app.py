@@ -17,7 +17,8 @@ BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 USERNAME = 'admin'
 PASSWORD = '123456'
 
-@app.route('/test')
+
+@app.route('/')
 def index():
     if 'username' in session:
         return render_template('index1.html')  # 登录后显示的页面
@@ -67,6 +68,10 @@ def run_tests():
     # 运行pytest框架
     subprocess.run(['python', 'run.py'])
     return 'Script started'
+
+@app.route('/test_page')
+def test_page():
+    return render_template('index1.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
