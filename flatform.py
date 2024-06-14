@@ -34,8 +34,8 @@ def submit():
     objects = request.get_json(force=True)
     print(objects)
 
-    # with open('data_file/test_case1.yaml', 'a', encoding='utf-8') as file:
-    #     yaml.dump([test_case], file, default_flow_style=False, allow_unicode=True)
+    with open('test_case1.yaml', 'a', encoding='utf-8') as file:
+        yaml.dump(objects, file, default_flow_style=False, allow_unicode=True)
 
     return 'Test case submitted successfully.'
 
