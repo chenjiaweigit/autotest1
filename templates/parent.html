@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="static/layui/2.9.10/layui/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/test-case.css">
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
@@ -64,9 +65,10 @@
                         <dd><a href="javascript:;">通知配置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a
+                <!-- <li class="layui-nav-item"><a
                         href="http://localhost:63342/flaskProject1/report/index.html?_ijt=&_ij_reload=RELOAD_ON_SAVE">测试报告</a>
-                </li>
+                </li> -->
+                <li class="layui-nav-item"><a href="{{ url_for('test_report') }}">测试报告</a></li>
 {#                <li class="layui-nav-item"><a href="javascript:;">the links</a></li>#}
             </ul>
         </div>
