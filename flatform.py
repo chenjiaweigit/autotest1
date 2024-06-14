@@ -9,17 +9,17 @@ simple = Blueprint('simple', __name__, template_folder='templates')
 
 @simple.route('/submit', methods=['POST'])
 def submit():
-    # test_case = {
-    #     'module_name': request.form['module_name'],
-    #     'test_case_name': request.form['test_case_name'],
-    #     'request_method': request.form['request_method'],
-    #     'url': request.form['url'],
-    #     'data': request.form['data'],
-    #     'success_assertion': request.form['success_assertion'],
-    #     'status_code_assertion': request.form['status_code_assertion'],
-    #     'content_assertion': request.form['content_assertion'],
-    #     'not_null_assertion': request.form['not_null_assertion']
-    # }
+    test_case = {
+        'module_name': request.form['module_name'],
+        'test_case_name': request.form['test_case_name'],
+        'request_method': request.form['request_method'],
+        'url': request.form['url'],
+        'data': request.form['data'],
+        'success_assertion': request.form['success_assertion'],
+        'status_code_assertion': request.form['status_code_assertion'],
+        'content_assertion': request.form['content_assertion'],
+        'not_null_assertion': request.form['not_null_assertion']
+    }
 
     test_case = {request.form['module_name'],
          request.form['module_name'],request.form['test_case_name'],request.form['request_method'],request.form['url'],request.form['data'],request.form['success_assertion'],request.form['status_code_assertion'],request.form['content_assertion'],request.form['not_null_assertion']
