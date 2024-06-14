@@ -51,6 +51,10 @@ def test_case():
 def project_environment():
     return render_template('project_environment.html')
 
+@app.route('/test_report')
+def test_report():
+    return render_template('test-report.html')
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
