@@ -190,6 +190,7 @@
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
 <script src="static/layui/2.9.10/layui/layui.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.2/axios.js"></script>
 <script>
     const { v4: uuidv4 } = uuid;
     var dataList = [];
@@ -317,6 +318,7 @@
             },
             'page-submit-data':function(){
                 console.log("提交提交",dataList)
+                addPageData()
             }
         })
 
@@ -382,6 +384,15 @@
             CloseWin();
         });
     })
+    
+
+    //页面提交调用接口
+    async function addPageData(){
+        const res = await axios.post('/submit',dataList)
+        console.log("aaaa",res)
+    }
+    
+    
     //提交
     function submit($, params) {
         const id = uuidv4()
