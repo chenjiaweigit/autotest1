@@ -1,5 +1,7 @@
 
 import os,time
+import subprocess
+
 import yaml
 from flask import Flask, render_template, request, session, redirect, url_for
 from flatform import simple
@@ -15,10 +17,10 @@ BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 USERNAME = 'admin'
 PASSWORD = '123456'
 
-@app.route('/')
+@app.route('/test')
 def index():
     if 'username' in session:
-        return render_template('index.html')  # 登录后显示的页面
+        return render_template('index1.html')  # 登录后显示的页面
     return redirect(url_for('login'))
 
 
@@ -55,6 +57,12 @@ def project_environment():
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
+
+@app.route('/run-tests', methods=['POST'])
+def run_tests():
+    # 运行pytest框架
+    subprocess.run(['python', 'run.py'])
+    return 'Script started'
 
 if __name__ == '__main__':
     app.run(debug=True)
