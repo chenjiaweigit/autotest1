@@ -7,7 +7,9 @@
     <div class="layui-btn-container" style="margin-top: 20px; padding-left: 20px">
         <button class="layui-btn layui-btn-sm" lay-on="add-data">新增</button>
     </div>
-    <table class="layui-hide" id="ID-table-demo-parse"></table>
+    <div style="width: 100%; height: calc(100% - 60px);">
+        <table class="layui-hide" id="ID-table-demo-parse"></table>
+    </div>
 
     <div id="add-main" style="display: none;">
         <form class="layui-form" id="add-form" action="">
@@ -43,97 +45,10 @@
             </div>
         </form>
     </div>
-    <div id="edit-main" style="display: none;">
-        <form class="layui-form" id="edit-form" lay-filter="updata" action="">
-            <div class="layui-form-item center" style="display: none;">
-                <label class="layui-form-label" style="width: 100px">id</label>
-                <div class="layui-input-block">
-                    <input type="hidden" name="id" required value="" style="width: 240px" lay-verify="required"
-                        placeholder="" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item center">
-                <label class="layui-form-label" style="width: 100px">用例编号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="caseNo" required value="" style="width: 240px" lay-verify="required"
-                        placeholder="请输入用例编号" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">模块名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="templateName" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入模块名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">用例名称&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="caseName" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入用例名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">请求方式&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="type" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入请求方式" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">请求地址&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="address" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入请求地址" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">请求参数&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="params" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入请求参数" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">成功断言&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="success" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入成功断言" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">状态码断言&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="status" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入状态码断言" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">内容断言&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="content" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入内容断言" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">非空断言&emsp;</label>
-                <div class="layui-input-block">
-                    <input type="text" name="notEmpty" required style="width: 240px" lay-verify="required"
-                        placeholder="请输入非空断言" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="editSave">立即提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
 </div>
 <script type="text/html" id="toolEventDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">启动</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">日志</a>
+    <a id="runButton" class="layui-btn layui-btn-xs" lay-event="run">运行</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="message">日志</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
@@ -142,18 +57,18 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.2/axios.js"></script>
 <script>
     const { v4: uuidv4 } = uuid;
-    var dataList = [];
+    var projectList = [];
     var rowData = {};
     var selectOptions = [
         { value: '正式环境', text: '正式环境' },
         { value: '测试环境', text: '测试环境' },
     ];
-    const tempDataList = localStorage.getItem('dataList')
+    const tempDataList = localStorage.getItem('projectList')
     if (tempDataList === null) {
-        localStorage.setItem('dataList', JSON.stringify(dataList))
+        localStorage.setItem('projectList', JSON.stringify(projectList))
     } else {
         const tempDataList1 = JSON.parse(tempDataList)
-        dataList = tempDataList1
+        projectList = tempDataList1
     }
 
     layui.use('table', function () {
@@ -163,7 +78,7 @@
         table.render({
             elem: '#ID-table-demo-parse',
             // url: 'static/data.json',
-            data: dataList,
+            data: projectList,
             page: true,
             response: {
                 statusCode: 200   // 重新规定成功的状态码为 200，table 组件默认为 0
@@ -189,6 +104,7 @@
                 },
                 { title: '操作', width: 240, templet: '#toolEventDemo' }
             ]],
+            // height:600
         });
 
         // 单元格编辑后的事件
@@ -206,9 +122,9 @@
             }
             // 编辑后续操作，如提交更新请求，以完成真实的数据更新
             // …
-            const targetIndex = dataList.findIndex(i => i.id === obj.id)
-            dataList[targetIndex] = obj
-            localStorage.setItem('dataList', JSON.stringify(dataList))
+            const targetIndex = projectList.findIndex(i => i.id === obj.id)
+            projectList[targetIndex] = obj
+            localStorage.setItem('projectList', JSON.stringify(projectList))
             table.reloadData('ID-table-demo-parse', {
                 scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
             });
@@ -230,9 +146,9 @@
             if (layEvent === 'del') { //删除
                 layer.confirm('确定删除吗？', function (index) {
                     obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
-                    const targetIndex = dataList.findIndex(i => i.id === obj.id)
-                    dataList.splice(targetIndex, 1)
-                    localStorage.setItem('dataList', JSON.stringify(dataList))
+                    const targetIndex = projectList.findIndex(i => i.id === obj.id)
+                    projectList.splice(targetIndex, 1)
+                    localStorage.setItem('projectList', JSON.stringify(projectList))
                     layer.close(index);
                     layer.msg('删除成功！', { icon: 1 }, function (index) {
                         // location.reload();
@@ -243,6 +159,8 @@
                         });
                     })
                 });
+            }else if(layEvent === 'run'){
+                postRunData(data.domains)
             }
         });
     });
@@ -275,7 +193,7 @@
                 });
             },
             'page-submit-data': function () {
-                console.log("提交提交", dataList)
+                console.log("提交提交", projectList)
                 addPageData()
             }
         })
@@ -334,10 +252,10 @@
             //选择的select对象值；
             var selectValue = data.value;
             //这里的dataList是我自定义的table中数据的缓存数据，下拉数据修改时赋值到这一行缓存数据
-            for (i = 0; i < dataList.length; i++) {
-                if (dataList[i].id == id) {
-                    dataList[i].environment = selectValue; //更新被修改的行数据
-                    localStorage.setItem('dataList', JSON.stringify(dataList))
+            for (i = 0; i < projectList.length; i++) {
+                if (projectList[i].id == id) {
+                    projectList[i].environment = selectValue; //更新被修改的行数据
+                    localStorage.setItem('projectList', JSON.stringify(projectList))
                     layui.table.reloadData('ID-table-demo-parse', {
                         scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
                     });
@@ -364,26 +282,29 @@
         });
     })
 
-    // 单元格编辑
-    function tableCellEdit() {
-
+    // 请求运行的接口
+    async function postRunData(tempDomains) {
+    //    layui.jquery('#runButton').text('运行中...').attr('disabled', true);
+       const res = await axios.post('/run_test_button', tempDomains)
+    //    if(res.status == 200){
+        //   layui.jquery('#runButton').text('运行').attr('disabled', false);
+    //    }
     }
 
 
     //页面提交调用接口
     async function addPageData() {
-        const res = await axios.post('/submit', dataList)
+        const res = await axios.post('/submit', projectList)
         console.log("aaaa", res)
     }
 
 
     //提交
     function submit($, params) {
-        console.log("ddd", params)
         const id = uuidv4()
         params.id = id
-        dataList.push(params)
-        localStorage.setItem('dataList', JSON.stringify(dataList))
+        projectList.push(params)
+        localStorage.setItem('projectList', JSON.stringify(projectList))
         layer.msg('新增成功！', { icon: 1 }, function (index) {
             location.reload();
             CloseWin();
@@ -393,9 +314,9 @@
     //编辑提交
     function editSubmit($, params) {
         const id = params.id;
-        let targetIndex = dataList.findIndex(i => i.id === id);
-        dataList[targetIndex] = params
-        localStorage.setItem('dataList', JSON.stringify(dataList))
+        let targetIndex = projectList.findIndex(i => i.id === id);
+        projectList[targetIndex] = params
+        localStorage.setItem('projectList', JSON.stringify(projectList))
         layer.msg('编辑成功！', { icon: 1 }, function (index) {
             location.reload();
             CloseWin();
