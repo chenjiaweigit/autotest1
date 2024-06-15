@@ -1,0 +1,9 @@
+pytest
+pytest-xdist
+pytest-ordering
+pytest-rerunfailures
+pytest-html
+allure-pytest
+requests
+pyyaml
+xlrd==1.2.0

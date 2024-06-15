@@ -1,0 +1,8 @@
+test_01:
+    # module, name, method, url, data,except_pt,except_code,except_result
+    # 模块名称，用例名称，请求方式，链接，数据，成功断言，状态码断言，内容是否存在断言，非空断言不需要填写
+    # - ["登录","错误登录","post","/api/typhon/passport/exchange/pass-token/by-password",{"account_name":"13593345531","password":"e10adc3949ba59abbe56e057f20f883e","captcha_code":"","captcha_id":""},True,200,'4000005']
+ - ["登录","获取验证码","get","/captchaImage",{},True,200,'操作成功']
+
+test_01:
+ - ["登录","获取验证码","get","/captchaImage",{},True,200,'操作成功']

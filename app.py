@@ -63,7 +63,11 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
-@app.route('/run-tests', methods=['POST'])
+@app.route('/run_pytest')
+def run_pytest():
+    return render_template('run_pytest.html')
+
+@app.route('/run_test_button', methods=['POST'])
 def run_tests():
     # 运行pytest框架
     subprocess.run(['python', 'run.py'])
