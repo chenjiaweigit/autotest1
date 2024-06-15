@@ -1,0 +1,25 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Run Button</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <button id="runButton">运行</button>
+    <script>
+        $(document).ready(function(){
+            $('#runButton').click(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '/run_test_button',
+                    success: function(response){
+                        $('#runButton').text('运行中...').attr('disabled', true);
+                        // 可以在这里设置一个定时器，用来轮询 Flask 应用，检查任务是否完成，然后更新按钮状态
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

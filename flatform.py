@@ -31,6 +31,7 @@ simple = Blueprint('simple', __name__, template_folder='templates')
 
 @simple.route('/submit', methods=['POST'])
 def submit():
+    """
     test_case = {
         'module_name': request.form['module_name'],
         'test_case_name': request.form['test_case_name'],
@@ -45,15 +46,37 @@ def submit():
 
     test_case = {request.form['module_name'],
          request.form['module_name'],request.form['test_case_name'],request.form['request_method'],request.form['url'],request.form['data'],request.form['success_assertion'],request.form['status_code_assertion'],request.form['content_assertion'],request.form['not_null_assertion']
-    }
-
-    with open('data_file/test_case1.yaml', 'a', encoding='utf-8') as file:
-        yaml.dump([test_case], file, default_flow_style=False, allow_unicode=True)
+    }"""
     objects = request.get_json(force=True)
     print(objects)
+    print(objects[0]['caseNo'])
+    # 要写入文件的数据
+    data = [
+        "test_01:",
+        ["登录", "获取验证码", "get", "/captchaImage", {}, True, 200, '操作成功']
+    ]
+    # 写入YAML文件
+    with open('test_01.yaml', 'w', encoding='utf-8') as file:
+        file.writelines(data[0] + '\n')
+    # 手动处理数据，以生成预期的 YAML 格式字符串
+    yaml_str = ' - ['
+    for item in data[1]:
+        if isinstance(item, str):
+            yaml_str += f'"{item}", '
+        elif isinstance(item, bool):
+            yaml_str += 'true, ' if item else 'false, '
+        else:
+            yaml_str += f'{item}, '
+    yaml_str = yaml_str.rstrip(', ') + ']\n'
+    # 写入文件
+    with open('test_01.yaml', 'a', encoding='utf-8') as file:
+        file.write(yaml_str)
 
-    with open('test_case1.yaml', 'a', encoding='utf-8') as file:
-        yaml.dump(objects, file, default_flow_style=False, allow_unicode=True)
+
+    # with open('test_case1.yaml', 'w', encoding='utf-8') as file:
+    #     yaml.dump(objects, file, default_flow_style=False, allow_unicode=True)
+    objects = request.get_json(force=True)
+    # print(objects)
 
     return 'Test case submitted successfully.'
 
