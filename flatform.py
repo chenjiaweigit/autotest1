@@ -1,96 +1,86 @@
 #!/usr/bin/env python
 # _*_ coding:utf-8 _*_
-import yaml
+
 from flask import Blueprint, request, render_template
 from flask import Flask,send_from_directory
 
 simple = Blueprint('simple', __name__, template_folder='templates')
 
 
-# @simple.route('/submit', methods=['POST'])
-# def submit():
-#     # test_case = {
-#     #     'module_name': request.form['module_name'],
-#     #     'test_case_name': request.form['test_case_name'],
-#     #     'request_method': request.form['request_method'],
-#     #     'url': request.form['url'],
-#     #     'data': request.form['data'],
-#     #     'success_assertion': request.form['success_assertion'],
-#     #     'status_code_assertion': request.form['status_code_assertion'],
-#     #     'content_assertion': request.form['content_assertion'],
-#     #     'not_null_assertion': request.form['not_null_assertion']
-#     # }
-#     test_case = {request.form['module_name'],
-#          request.form['module_name'],request.form['test_case_name'],request.form['request_method'],request.form['url'],request.form['data'],request.form['success_assertion'],request.form['status_code_assertion'],request.form['content_assertion'],request.form['not_null_assertion']
-#     }
+def parse_params(param_str):
+    # Remove the curly braces
+    param_str = param_str.strip('{}')
+    # Split the string by semicolon
+    param_pairs = param_str.split(';')
+    # Split each pair by colon and convert to dictionary
+    params = {}
+    for pair in param_pairs:
+        key, value = pair.split(':')
+        params[key.strip()] = value.strip()
+    return params
 
-#     with open('data_file/test_case1.yaml', 'a', encoding='utf-8') as file:
-#         yaml.dump([test_case], file, default_flow_style=False, allow_unicode=True)
 
-#     return 'Test case submitted successfully.'
+def transform_data(getdata):
+    data = []
+    for item in getdata:
+        transformed_item = [
+            f"{item['caseNo']}:",
+            [
+                item['templateName'],
+                item['caseName'],
+                item['type'],
+                item['address'],
+                parse_params(item['params']),  # Convert params to a dictionary
+                item['success'],
+                item['status'],
+                item['content'],
+                item['notEmpty']
+            ]
+        ]
+        data.append(transformed_item)
+    return data
+
 
 @simple.route('/submit', methods=['POST'])
 def submit():
     """
-    test_case = {
-        'module_name': request.form['module_name'],
-        'test_case_name': request.form['test_case_name'],
-        'request_method': request.form['request_method'],
-        'url': request.form['url'],
-        'data': request.form['data'],
-        'success_assertion': request.form['success_assertion'],
-        'status_code_assertion': request.form['status_code_assertion'],
-        'content_assertion': request.form['content_assertion'],
-        'not_null_assertion': request.form['not_null_assertion']
-    }
-
-    test_case = {request.form['module_name'],
-         request.form['module_name'],request.form['test_case_name'],request.form['request_method'],request.form['url'],request.form['data'],request.form['success_assertion'],request.form['status_code_assertion'],request.form['content_assertion'],request.form['not_null_assertion']
-    }"""
+    解析json数据，写入测试用例
+    :return:
+    """
     objects = request.get_json(force=True)
     print(objects)
-    print(objects[0]['caseNo'])
-    # 要写入文件的数据
-    data = [
-        "test_01:",
-        ["登录", "获取验证码", "get", "/captchaImage", {}, True, 200, '操作成功']
-    ]
+    data = transform_data(objects)
+
+    # 定义一个标志变量
+    is_first_write = True
     # 写入YAML文件
-    with open('test_01.yaml', 'w', encoding='utf-8') as file:
-        file.writelines(data[0] + '\n')
-    # 手动处理数据，以生成预期的 YAML 格式字符串
-    yaml_str = ' - ['
-    for item in data[1]:
-        if isinstance(item, str):
-            yaml_str += f'"{item}", '
-        elif isinstance(item, bool):
-            yaml_str += 'true, ' if item else 'false, '
-        else:
-            yaml_str += f'{item}, '
-    yaml_str = yaml_str.rstrip(', ') + ']\n'
-    # 写入文件
-    with open('test_01.yaml', 'a', encoding='utf-8') as file:
-        file.write(yaml_str)
-
-
-    # with open('test_case1.yaml', 'w', encoding='utf-8') as file:
-    #     yaml.dump(objects, file, default_flow_style=False, allow_unicode=True)
-    objects = request.get_json(force=True)
-    # print(objects)
+    for i in range(len(data)):
+        mode = 'w' if is_first_write else 'a'
+        with open('date_file/test_case1.yaml', mode, encoding='utf-8') as file:
+            file.writelines(data[i][0] + '\n')
+        # 手动处理数据，以生成预期的 YAML 格式字符串
+        yaml_str = ' - ['
+        for item in data[i][1]:
+            if isinstance(item, str):
+                yaml_str += f'"{item}", '
+            elif isinstance(item, bool):
+                yaml_str += 'True, ' if item else 'False, '
+            else:
+                yaml_str += f'{item}, '
+        yaml_str = yaml_str.rstrip(', ') + ']\n'
+        # 写入文件
+        with open('date_file/test_case1.yaml', 'a', encoding='utf-8') as file:
+            file.write(yaml_str)
+        # 只在第一次写入时使用覆盖写入模式
+        is_first_write = False
 
     return 'Test case submitted successfully.'
+
 
 @simple.route('/automation/interface')
 def automation_interface():
     return render_template('test_case.html', content="接口管理页面内容")
 
-# @simple.route('/test_case')
-# def test_case():
-#     return  render_template('index.html')
-
-# @simple.route('/project_environment')
-# def project_environment():
-#     return render_template('project_environment.html')
 
 @simple.route('/static_page')
 def static_page():
