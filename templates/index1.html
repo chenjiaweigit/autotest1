@@ -1,0 +1,94 @@
+{% extends "parent.html" %}
+{% block title %}
+测试页面
+{% endblock %}
+{% block body %}
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn">
+    按钮 <i class="layui-icon layui-icon-down layui-font-12"></i>
+  </button>
+    <button id="runButton" type="button" class="layui-btn">
+    运行 <i class="layui-icon layui-icon-triangle-r layui-font-20"></i>
+  </button>
+        <script>
+        document.getElementById('runButton').addEventListener('click', function() {
+            var button = this;
+            // 改变按钮状态为加载中
+            button.classList.add('layui-btn-disabled', 'layui-btn-loading');
+            button.textContent = '加载中...';
+
+            // 模拟异步操作，例如AJAX请求
+            setTimeout(function() {
+                // 操作完成后恢复按钮状态
+                button.classList.remove('layui-btn-disabled', 'layui-btn-loading');
+                button.textContent = '运行';
+            }, 3000); // 模拟3秒的加载时间
+        });
+    </script>
+    <button class="layui-btn">
+  <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
+</button>
+    <button id="runButton1" type="button" class="layui-btn">
+        运行 <i class="layui-icon layui-icon-triangle-r layui-font-20"></i>
+    </button>
+    <script>
+        document.getElementById('runButton1').addEventListener('click', function() {
+            var button = this;
+            // 保存原始内容
+            var originalContent = button.innerHTML;
+            // 改变按钮状态为加载中
+            button.classList.add('layui-btn-disabled');
+            button.innerHTML = '执行中 <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';
+
+            // 模拟异步操作，例如AJAX请求
+            setTimeout(function() {
+                // 操作完成后恢复按钮状态
+                button.classList.remove('layui-btn-disabled');
+                button.innerHTML = originalContent;
+            }, 3000); // 模拟3秒的加载时间
+        });
+    </script>
+  <button type="button" class="layui-btn">
+    <i class="layui-icon layui-icon-left"></i>
+  </button>
+  <button type="button" class="layui-btn">
+    <i class="layui-icon layui-icon-right"></i>
+  </button>
+  <button type="button" class="layui-btn">
+    <i class="layui-icon layui-icon-edit"></i>
+  </button>
+  <button type="button" class="layui-btn">
+    <i class="layui-icon layui-icon-share"></i>
+  </button>
+</div>
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+    <i class="layui-icon layui-icon-left"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+    <i class="layui-icon layui-icon-right"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+    <i class="layui-icon layui-icon-edit"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+    <i class="layui-icon layui-icon-delete"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+    <i class="layui-icon layui-icon-share"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled">
+    <i class="layui-icon layui-icon-delete"></i>
+  </button>
+
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">
+    <i class="layui-icon layui-icon-left"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">
+    <i class="layui-icon layui-icon-right"></i>
+  </button>
+  <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">
+    <i class="layui-icon layui-icon-edit"></i>
+  </button>
+</div>
+{% endblock %}

@@ -1,2 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Jun 05 14:27:25 CST 2024","Wed Jun 05 14:27:30 CST 2024","5180","testcase","test_login","Test_login","","","获取验证码-预期成功","该用例是针对 监控""获取验证码""功能是否正常 场景的测试"
