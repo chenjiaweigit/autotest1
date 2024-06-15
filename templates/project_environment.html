@@ -3,5 +3,411 @@
 自动化测试平台
 {% endblock %}
 {% block body %}
-    项目环境配置
+<div class="project-environment-wrap">
+    <div class="layui-btn-container" style="margin-top: 20px; padding-left: 20px">
+        <button class="layui-btn layui-btn-sm" lay-on="add-data">新增</button>
+    </div>
+    <table class="layui-hide" id="ID-table-demo-parse"></table>
+
+    <div id="add-main" style="display: none;">
+        <form class="layui-form" id="add-form" action="">
+            <div class="layui-form-item center">
+                <label class="layui-form-label" style="width: 100px">项目名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="projectName" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">环境地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="domains" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入环境地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">环境&emsp;</label>
+                <div class="layui-input-block">
+                    <select name="environment" required lay-verify="required" class="layui-border select-demo-primary"
+                        lay-ignore style="width: 240px; height: 38px;">
+                        <option value="正式环境">正式环境</option>
+                        <option value="测试环境">测试环境</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="edit-main" style="display: none;">
+        <form class="layui-form" id="edit-form" lay-filter="updata" action="">
+            <div class="layui-form-item center" style="display: none;">
+                <label class="layui-form-label" style="width: 100px">id</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item center">
+                <label class="layui-form-label" style="width: 100px">用例编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseNo" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="请输入用例编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">模块名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="templateName" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入模块名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">用例名称&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseName" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入用例名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求方式&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求方式" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求地址&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">请求参数&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="params" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入请求参数" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">成功断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="success" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入成功断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">状态码断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="status" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入状态码断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">内容断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="content" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入内容断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">非空断言&emsp;</label>
+                <div class="layui-input-block">
+                    <input type="text" name="notEmpty" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入非空断言" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="editSave">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/html" id="toolEventDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">启动</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">日志</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script src="static/layui/2.9.10/layui/layui.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.2/axios.js"></script>
+<script>
+    const { v4: uuidv4 } = uuid;
+    var dataList = [];
+    var rowData = {};
+    var selectOptions = [
+        { value: '正式环境', text: '正式环境' },
+        { value: '测试环境', text: '测试环境' },
+    ];
+    const tempDataList = localStorage.getItem('dataList')
+    if (tempDataList === null) {
+        localStorage.setItem('dataList', JSON.stringify(dataList))
+    } else {
+        const tempDataList1 = JSON.parse(tempDataList)
+        dataList = tempDataList1
+    }
+
+    layui.use('table', function () {
+        var table = layui.table;
+
+        // 渲染
+        table.render({
+            elem: '#ID-table-demo-parse',
+            // url: 'static/data.json',
+            data: dataList,
+            page: true,
+            response: {
+                statusCode: 200   // 重新规定成功的状态码为 200，table 组件默认为 0
+            },
+            // 将原始数据解析成 table 组件所规定的数据格式
+            parseData: function (res) {
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            },
+            cols: [[
+                { field: 'id', title: 'id', width: 150, style: 'overflow:hidden' },
+                { field: 'projectName', title: '项目名称', width: 120, edit: 'text' },
+                { field: 'domains', title: '环境地址', edit: 'text', style: 'overflow:hidden' },
+                // { field: 'environment', title: '环境', width: 150, templet: '#TPL-select-primary' },
+                {
+                    field: 'environment', title: '环境', width: 150, templet: function (d) {
+                        return '<select lay-filter="editStateS" name="environment" id="' + d.id + '"><option value="正式环境" ' + (d.environment === '正式环境' ? 'selected' : '') + '>正式环境</option><option value="测试环境" ' + (d.environment === '测试环境' ? 'selected' : '') + '>测试环境</option></select>';
+                    }
+                },
+                { title: '操作', width: 240, templet: '#toolEventDemo' }
+            ]],
+        });
+
+        // 单元格编辑后的事件
+        table.on('edit(ID-table-demo-parse)', function (obj) {
+            var field = obj.field; // 得到修改的字段
+            var value = obj.value // 得到修改后的值
+            var oldValue = obj.oldValue // 得到修改前的值 -- v2.8.0 新增
+            var data = obj.data // 得到所在行所有键值
+            var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.0 新增
+
+            // 值的校验
+            if (value.replace(/\s/g, '') === '') {
+                layer.tips('值不能为空', this, { tips: 1 });
+                return obj.reedit(); // 重新编辑 -- v2.8.0 新增
+            }
+            // 编辑后续操作，如提交更新请求，以完成真实的数据更新
+            // …
+            const targetIndex = dataList.findIndex(i => i.id === obj.id)
+            dataList[targetIndex] = obj
+            localStorage.setItem('dataList', JSON.stringify(dataList))
+            table.reloadData('ID-table-demo-parse', {
+                scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+            });
+            layer.msg('编辑成功！')
+        });
+
+        // 单元格工具事件
+        table.on('tool(ID-table-demo-parse)', function (obj) {
+            var data = obj.data; // 得到当前行数据
+            var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
+            var index = obj.index; // 得到当前行索引
+            var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
+            var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
+            var options = obj.config; // 获取当前表格基础属性配置项
+            var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.3 新增
+            console.log(obj); // 查看对象所有成员
+
+            // 根据 lay-event 的值执行不同操作
+            if (layEvent === 'del') { //删除
+                layer.confirm('确定删除吗？', function (index) {
+                    obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
+                    const targetIndex = dataList.findIndex(i => i.id === obj.id)
+                    dataList.splice(targetIndex, 1)
+                    localStorage.setItem('dataList', JSON.stringify(dataList))
+                    layer.close(index);
+                    layer.msg('删除成功！', { icon: 1 }, function (index) {
+                        // location.reload();
+                        // CloseWin();
+                        // 让table重新渲染
+                        table.reloadData('ID-table-demo-parse', {
+                            scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                        });
+                    })
+                });
+            }
+        });
+    });
+
+    //JS
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var util = layui.util;
+        var $ = layui.$;
+
+        // 事件
+        util.on('lay-on', {
+            'add-data': function () {
+                layer.open({
+                    type: 1,
+                    shade: 0,
+                    // area: ['420px', '240px'], // 宽高
+                    title: "新建项目环境配置",
+                    // closeBtn: false,
+                    // shift: 2,
+                    area: ['400px', '300px'],
+                    // shadeClose: true,
+                    // btn: ['新增', '取消'],
+                    // btnAlign: 'c',
+                    content: $("#add-main"),
+                    success: function (layero, index) { },
+                    yes: function () {
+                    }
+                });
+            },
+            'page-submit-data': function () {
+                console.log("提交提交", dataList)
+                addPageData()
+            }
+        })
+
+        //头部事件
+        util.event('lay-header-event', {
+            menuLeft: function (othis) { // 左侧菜单事件
+                layer.msg('展开左侧菜单的操作', { icon: 0 });
+            },
+            menuRight: function () {  // 右侧菜单事件
+                layer.open({
+                    type: 1,
+                    title: '更多',
+                    content: '<div style="padding: 15px;">处理右侧面板的操作</div>',
+                    area: ['260px', '100%'],
+                    offset: 'rt', // 右上角
+                    anim: 'slideLeft', // 从右侧抽屉滑出
+                    shadeClose: true,
+                    scrollbar: false
+                });
+            }
+        });
+    });
+
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form;
+        //表单验证
+        // form.verify({
+        //     firstpwd: [/(.+){6,12}$/, '密码必须6到12位'],
+        //     secondpwd: function (value) {
+        //         if (value != $("#firstpwd").val()) {
+        //             $("#secondpwd").val("");
+        //             return '确认密码与密码不一致';
+        //         }
+        //     },
+        //     productCodes: function (value) {
+        //         if (value == '') {
+        //             return "请选择系统分配";
+        //         }
+        //     },
+        //     sysqx: function (value) {
+        //         if (value == '') {
+        //             return "请选择权限";
+        //         }
+        //     }
+        // });
+        //监听下拉框编辑
+        form.on('select(editStateS)', function (data) {
+            //获取当前行tr对象
+            var elem = data.othis.parents('tr');
+            //第一列的值是Guid，取guid来判断
+            // var id = elem.first().find('td').eq(1).text();
+            var id = elem.first().find('td').eq(0).text();
+            //选择的select对象值；
+            var selectValue = data.value;
+            //这里的dataList是我自定义的table中数据的缓存数据，下拉数据修改时赋值到这一行缓存数据
+            for (i = 0; i < dataList.length; i++) {
+                if (dataList[i].id == id) {
+                    dataList[i].environment = selectValue; //更新被修改的行数据
+                    localStorage.setItem('dataList', JSON.stringify(dataList))
+                    layui.table.reloadData('ID-table-demo-parse', {
+                        scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                    });
+                    layer.msg('编辑成功！')
+                }
+            }
+        })
+
+        //新增提交监听事件
+        form.on('submit(save)', function (data) {
+            params = data.field;
+            submit($, params);
+            return false;
+        })
+        //编辑
+        form.on('submit(editSave)', function (data) {
+            params = data.field;
+            editSubmit($, params);
+            return false;
+        })
+        var obj = document.getElementById('closeBtn');
+        obj.addEventListener('click', function cancel() {
+            CloseWin();
+        });
+    })
+
+    // 单元格编辑
+    function tableCellEdit() {
+
+    }
+
+
+    //页面提交调用接口
+    async function addPageData() {
+        const res = await axios.post('/submit', dataList)
+        console.log("aaaa", res)
+    }
+
+
+    //提交
+    function submit($, params) {
+        console.log("ddd", params)
+        const id = uuidv4()
+        params.id = id
+        dataList.push(params)
+        localStorage.setItem('dataList', JSON.stringify(dataList))
+        layer.msg('新增成功！', { icon: 1 }, function (index) {
+            location.reload();
+            CloseWin();
+        })
+
+    }
+    //编辑提交
+    function editSubmit($, params) {
+        const id = params.id;
+        let targetIndex = dataList.findIndex(i => i.id === id);
+        dataList[targetIndex] = params
+        localStorage.setItem('dataList', JSON.stringify(dataList))
+        layer.msg('编辑成功！', { icon: 1 }, function (index) {
+            location.reload();
+            CloseWin();
+        })
+
+    }
+    //关闭页面
+    function CloseWin() {
+        parent.location.reload(); // 父页面刷新
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭 
+    }
+
+</script>
 {% endblock %}
