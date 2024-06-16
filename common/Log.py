@@ -49,5 +49,4 @@ if __name__ == '__main__':
     # log.info("test111")
     # log.info("test222")
     # log.info("test333")
-
     log.info('test')

@@ -1,4 +1,5 @@
 <!-- templates/index.html -->
+<!--暂时保留
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,5 +22,49 @@
             });
         });
     </script>
+</body>
+</html>
+-->
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pytest Logs</title>
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+    <script type="text/javascript">
+        var socket = io();
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+        socket.on('pytest_log', function(data) {
+            var logElement = document.getElementById('logs');
+            logElement.textContent += data.log;
+            logElement.scrollTop = logElement.scrollHeight;
+        });
+
+        function startPytest() {
+            fetch('/start_pytest')
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error starting pytest:', error));
+        }
+    </script>
+    <style>
+        #logs {
+            white-space: pre-line; /* 保持换行和空格 */
+            height: 80vh; /* 设置日志框高度 */
+            overflow-y: scroll; /* 当内容超过框时添加滚动条 */
+            border: 1px solid #ccc; /* 添加边界 */
+            padding: 10px; /* 添加内边距 */
+            font-family: 'Courier New', Courier, monospace; /* 设置字体 */
+        }
+    </style>
+</head>
+<body>
+    <div id="logs"></div>
+    <button onclick="startPytest()">Start Pytest</button>
 </body>
 </html>

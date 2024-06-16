@@ -59,16 +59,18 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">项目配置</a>
                     <dl class="layui-nav-child">
-{#                        <dd><a href="{{ url_for('project_environment') }}">项目环境配置</a></dd>#}
                         <dd><a href="{{ url_for('project_environment') }}">项目环境配置</a></dd>
                         <dd><a href="javascript:;">数据库配置</a></dd>
                         <dd><a href="javascript:;">通知配置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a
-                        href="http://localhost:63342/autotest1/report/index.html?_ijt=1u1eidhbfdll9u8ql3pg9osgli">测试报告</a>
-                </li>
-{#                <li class="layui-nav-item"><a href="{{ url_for('test_report') }}">测试报告</a></li>#}
+{#                <li class="layui-nav-item"><a#}
+{#                        href="http://localhost:63342/autotest1/report/index.html?_ijt=1u1eidhbfdll9u8ql3pg9osgli">测试报告</a>#}
+{#                </li>#}
+{#                <li class="layui-nav-item"><a#}
+{#                        href="http://localhost:63342/autotest1/report/index.html">测试报告</a>#}
+{#                </li>#}
+                <li class="layui-nav-item"><a href="{{ url_for('test_report') }}">测试报告</a></li>
 {#                <li class="layui-nav-item"><a href="javascript:;">the links</a></li>#}
             </ul>
         </div>
