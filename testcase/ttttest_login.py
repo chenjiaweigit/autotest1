@@ -34,11 +34,11 @@ class Test_login:
         log.info("*************** {}-开始执行用例 ***************".format(name))
         result = keyword_request(name=name, method=method, url=url, data=data)
         log.info("状态码 ==>> 期望结果：{}， 实际结果：【 {} 】".format(except_code, result.response.json()['code']))
-        assert result.success == except_pt, result.error
-        assert result.response.status_code == except_code
+        assert result.success == except_pt, log.info("成功断言失败：{}".format(result.error))
+        assert result.response.status_code == except_code, log.info("状态码断言失败，except_code返回为：{}".format(except_code))
         assert result.response.json()['code'] == except_code
         log.info(f'{json.dumps(result.response.json(), sort_keys=True, indent=2)}')   #将返回以json格式输出
         log.info("except_result数据为：{}".format(except_result))
-        assert str(except_result) in result.data
+        assert str(except_result) in result.data, log.info("内容断言失败，接口返回为：{}".format(result.data))
         assert result.data != "", "数据返回为空"
         log.info("*************** {}-结束执行用例 ***************".format(name))

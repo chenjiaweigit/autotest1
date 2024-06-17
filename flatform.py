@@ -85,20 +85,20 @@ def submit():
     objects = request.get_json(force=True)
     log.info("{}".format(objects))
     data = transform_data(objects)
-    print(data)
-
+    log.info(f'解析后的数据==>> {data}')
+    # print(data[1]['caseNo'])
     # 定义一个标志变量
     is_first_write = True
     # 写入YAML文件
     try :
-        for i in range(len(data)):
+        for case_list in range(len(data)):
             mode = 'w' if is_first_write else 'a'
             with open('data_file/test_case.yaml', mode, encoding='utf-8') as file:
-                file.writelines(data[i][0] + '\n')
+                file.writelines(data[case_list][0] + '\n')
             # 手动处理数据，以生成预期的 YAML 格式字符串
             
             yaml_str = ' - ['
-            for item in data[i][1]:
+            for item in data[case_list][1]:
                 if isinstance(item, str):
                     yaml_str += f'"{item}", '
                 elif isinstance(item, bool):
@@ -111,12 +111,59 @@ def submit():
                 file.write(yaml_str)
             # 只在第一次写入时使用覆盖写入模式
             is_first_write = False
+            generate_test_script(data[case_list][0], case_list)
     except Exception as e:
         log.error("{}".format(e))
     else:
         log.info("用例写入yaml文件完成！")
-
+    # case_status = {'data_num':len(data),'status':'Test case submitted successfully.'}
+    # return case_status
     return 'Test case submitted successfully.'
+
+
+def generate_test_script(test_cases, casefile_list):
+    # casefile_list_New
+    script_content1 = '''#!/usr/bin/env python
+# _*_ coding:utf-8 _*_
+import allure
+import pytest
+from common.Log import log
+from operation.keyword_request import keyword_request
+from testcase.conftest import api_data
+
+
+@allure.severity(allure.severity_level.NORMAL)
+@allure.issue("https://www.cnblogs.com/wintest", name="点击，跳转到对应BUG的链接地址")
+@allure.testcase("https://www.cnblogs.com/wintest", name="点击，跳转到对应用例的链接地址")
+@allure.title("{name}-预期成功")
+@pytest.mark.smoke1
+@pytest.mark.run(order=4)'''
+    script_content2 = f'''
+@pytest.mark.parametrize("module,name,method,url,data,except_pt,except_code,except_result", api_data['{test_cases.split(':')[0]}'])
+def {test_cases.split(':')[0]}(module, name, method, url, data, except_pt, except_code, except_result):'''
+    script_content3 = '''
+    allure.dynamic.feature("{}模块".format(module))
+    allure.dynamic.story("用例--/{}/--预期成功".format(name))
+    allure.dynamic.description("该用例是针对 监控{name}功能是否正常 场景的测试")
+    
+    log.info("*************** {}-开始执行用例 ***************".format(name))
+    result = keyword_request(name=name, method=method, url=url, data=data)
+    log.info("状态码 ==>> 期望结果：{}， 实际结果：【 {} 】".format(except_code, result.response.json().get('data',{}).get('code')))
+    assert result.success == except_pt, log.info("成功断言失败：{}".format(result.error))
+    assert result.response.status_code == except_code, \
+        log.info("状态码断言失败，期望值：{}，接口返回为：{}".format(except_code, result.response.status_code))
+    log.info("except_result数据为：{}".format(except_result))
+    assert str(except_result) in result.data, \
+        log.info("内容断言失败，期望值：{}，接口返回为：{}".format(str(except_result), result.data))
+    assert result.data != "", log.info("断言失败：data数据返回为空>>{}".format(result.data))
+    # result.data1 = eval(result.data)
+    # assert result.data1 != "",log.info("断言失败：mean数据返回为空>>{}".format(result.data))
+    log.info("*************** {}-结束执行用例 ***************".format(name))
+'''
+    casefile_Name = f'testcase/test_api{casefile_list}.py'
+    with open(casefile_Name, 'w', encoding='utf-8') as file:
+        file.write(script_content1 + script_content2 + script_content3)
+        log.info(f"Test script generated successfully==>{casefile_Name}")
 
 
 @simple.route('/automation/interface')

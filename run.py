@@ -25,5 +25,5 @@ if __name__ == '__main__':
     '''
     os.system('chomd 777 doubleClickReadReport.sh')
     os.system('./doubleClickReadReport.sh') # Mac下执行
-    os.system('.\doubleClickReadReport.sh')  # Mac下执行
+    os.system('.\doubleClickReadReport.sh')  # win下执行
     '''
