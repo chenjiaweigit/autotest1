@@ -5,8 +5,9 @@ def getrootdirectory():
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     return BASE_PATH
 
-index_file_path = os.path.join(getrootdirectory(), "report1", "index.html")
-summary_file_path = os.path.join(getrootdirectory(), "report1", "widgets","summary.json")
+index_file_path = os.path.join(getrootdirectory(), "report", "index.html")
+summary_file_path = os.path.join(getrootdirectory(), "report", "widgets","summary.json")
+
 # 设置报告窗口的标题
 def set_windos_title(new_title):
     """  设置打开的 Allure 报告的浏览器窗口标题文案

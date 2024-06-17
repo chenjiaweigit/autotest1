@@ -1,97 +1,161 @@
 #!/usr/bin/env python
 # _*_ coding:utf-8 _*_
-import yaml
-from flask import Blueprint, request, render_template
+import json
+
+from flask import Blueprint, request, render_template, jsonify
 from flask import Flask,send_from_directory
+from common.Log import log
+import subprocess
+from common.yaml_util1 import modify_ini_and_write
 
 simple = Blueprint('simple', __name__, template_folder='templates')
 
+def parse_params(param_str):
+    # Remove the curly braces
+    param_str = param_str.strip('{}')
+    # Split the string by semicolon
+    param_pairs = param_str.split(';')
+    # Split each pair by colon and convert to dictionary
+    params = {}
+    for pair in param_pairs:
+        key, value = pair.split(':')
+        params[key.strip()] = value.strip()
+    return params
 
-# @simple.route('/submit', methods=['POST'])
-# def submit():
-#     # test_case = {
-#     #     'module_name': request.form['module_name'],
-#     #     'test_case_name': request.form['test_case_name'],
-#     #     'request_method': request.form['request_method'],
-#     #     'url': request.form['url'],
-#     #     'data': request.form['data'],
-#     #     'success_assertion': request.form['success_assertion'],
-#     #     'status_code_assertion': request.form['status_code_assertion'],
-#     #     'content_assertion': request.form['content_assertion'],
-#     #     'not_null_assertion': request.form['not_null_assertion']
-#     # }
-#     test_case = {request.form['module_name'],
-#          request.form['module_name'],request.form['test_case_name'],request.form['request_method'],request.form['url'],request.form['data'],request.form['success_assertion'],request.form['status_code_assertion'],request.form['content_assertion'],request.form['not_null_assertion']
-#     }
 
-#     with open('data_file/test_case1.yaml', 'a', encoding='utf-8') as file:
-#         yaml.dump([test_case], file, default_flow_style=False, allow_unicode=True)
+def transform_data(getdata):
+    data = []
+    for item in getdata:
+        if item['params'] == "" or item['params'] == "{}"\
+                and item['notEmpty'].lower() == "none":
+            transformed_item = [
+                f"{item['caseNo']}:",
+                [
+                    item['templateName'],
+                    item['caseName'],
+                    item['type'],
+                    item['address'],
+                    {},  # Convert params to a dictionary
+                    [True if item['success'].lower() == 'true' else True][0],
+                    int(item['status']),
+                    item['content'],
+                ]
+            ]
+        elif item['params'] == "" or item['params'] == "{}" \
+                and item['notEmpty'].lower() != "none":
+            transformed_item = [
+                f"{item['caseNo']}:",
+                [
+                    item['templateName'],
+                    item['caseName'],
+                    item['type'],
+                    item['address'],
+                    {},  # Convert params to a dictionary
+                    [True if item['success'].lower() == 'true' else True][0],
+                    int(item['status']),
+                    item['content'],
+                    item['notEmpty']
+                ]
+            ]
+        else:
+            transformed_item = [
+                f"{item['caseNo']}:",
+                [
+                    item['templateName'],
+                    item['caseName'],
+                    item['type'],
+                    item['address'],
+                    parse_params(item['params']),  # Convert params to a dictionary
+                    [True if item['success'].lower() == 'true' else True][0],
+                    int(item['status']),
+                    item['content'],
+                    item['notEmpty']
+                ]
+            ]
+        data.append(transformed_item)
+    return data
 
-#     return 'Test case submitted successfully.'
 
 @simple.route('/submit', methods=['POST'])
 def submit():
     """
-    test_case = {
-        'module_name': request.form['module_name'],
-        'test_case_name': request.form['test_case_name'],
-        'request_method': request.form['request_method'],
-        'url': request.form['url'],
-        'data': request.form['data'],
-        'success_assertion': request.form['success_assertion'],
-        'status_code_assertion': request.form['status_code_assertion'],
-        'content_assertion': request.form['content_assertion'],
-        'not_null_assertion': request.form['not_null_assertion']
-    }
-
-    test_case = {request.form['module_name'],
-         request.form['module_name'],request.form['test_case_name'],request.form['request_method'],request.form['url'],request.form['data'],request.form['success_assertion'],request.form['status_code_assertion'],request.form['content_assertion'],request.form['not_null_assertion']
-    }"""
+    解析json数据，写入测试用例
+    :return:
+    """
     objects = request.get_json(force=True)
-    print(objects)
-    print(objects[0]['caseNo'])
-    # 要写入文件的数据
-    data = [
-        "test_01:",
-        ["登录", "获取验证码", "get", "/captchaImage", {}, True, 200, '操作成功']
-    ]
+    log.info("{}".format(objects))
+    data = transform_data(objects)
+    print(data)
+
+    # 定义一个标志变量
+    is_first_write = True
     # 写入YAML文件
-    with open('test_01.yaml', 'w', encoding='utf-8') as file:
-        file.writelines(data[0] + '\n')
-    # 手动处理数据，以生成预期的 YAML 格式字符串
-    yaml_str = ' - ['
-    for item in data[1]:
-        if isinstance(item, str):
-            yaml_str += f'"{item}", '
-        elif isinstance(item, bool):
-            yaml_str += 'true, ' if item else 'false, '
-        else:
-            yaml_str += f'{item}, '
-    yaml_str = yaml_str.rstrip(', ') + ']\n'
-    # 写入文件
-    with open('test_01.yaml', 'a', encoding='utf-8') as file:
-        file.write(yaml_str)
-
-
-    # with open('test_case1.yaml', 'w', encoding='utf-8') as file:
-    #     yaml.dump(objects, file, default_flow_style=False, allow_unicode=True)
-    objects = request.get_json(force=True)
-    # print(objects)
+    try :
+        for i in range(len(data)):
+            mode = 'w' if is_first_write else 'a'
+            with open('data_file/test_case.yaml', mode, encoding='utf-8') as file:
+                file.writelines(data[i][0] + '\n')
+            # 手动处理数据，以生成预期的 YAML 格式字符串
+            
+            yaml_str = ' - ['
+            for item in data[i][1]:
+                if isinstance(item, str):
+                    yaml_str += f'"{item}", '
+                elif isinstance(item, bool):
+                    yaml_str += 'True, ' if item else 'False, '
+                else:
+                    yaml_str += f'{item}, '
+            yaml_str = yaml_str.rstrip(', ') + ']\n'
+            # 写入文件
+            with open('data_file/test_case.yaml', 'a', encoding='utf-8') as file:
+                file.write(yaml_str)
+            # 只在第一次写入时使用覆盖写入模式
+            is_first_write = False
+    except Exception as e:
+        log.error("{}".format(e))
+    else:
+        log.info("用例写入yaml文件完成！")
 
     return 'Test case submitted successfully.'
+
 
 @simple.route('/automation/interface')
 def automation_interface():
     return render_template('test_case.html', content="接口管理页面内容")
 
-# @simple.route('/test_case')
-# def test_case():
-#     return  render_template('index.html')
-
-# @simple.route('/project_environment')
-# def project_environment():
-#     return render_template('project_environment.html')
 
 @simple.route('/static_page')
 def static_page():
     return send_from_directory('static', 'static_page.html')
+
+
+
+@simple.route('/run_pytest', methods=['POST'])
+def run_tests():
+
+    """
+    # 打印请求头
+    print("Headers: ", request.headers)
+    # 打印请求数据
+    print("Data: ", request.data)
+    # 打印 JSON 数据
+    print("JSON: ", request.get_json())
+    """
+    try:
+        # 获取原始字符串数据
+        temp_domains = request.data.decode('utf-8')
+        if not temp_domains:
+            raise ValueError("Empty data received")
+        # 处理 temp_domains 写入setting.ini配置文件
+        if modify_ini_and_write('host', 'api_root_url', temp_domains):
+            # 运行pytest框架
+            log.info("="*25 + "开始运行pytest测试框架" + "="*25)
+            subprocess.run(['python', 'run.py'])
+        result = {"status": "success", "message": "Test started"}
+        return jsonify(result), 200
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    except Exception as e:
+        # 捕获所有其他异常
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+

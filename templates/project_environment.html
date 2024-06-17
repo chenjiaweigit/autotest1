@@ -1,6 +1,6 @@
 {% extends 'parent.html' %}
 {% block title %}
-    自动化测试平台
+自动化测试平台
 {% endblock %}
 {% block body %}
 <div class="project-environment-wrap">
@@ -55,6 +55,8 @@
 <script src="static/layui/2.9.10/layui/layui.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.2/axios.js"></script>
+<!-- 引入 Socket.IO -->
+<script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
 <script>
     const { v4: uuidv4 } = uuid;
     var projectList = [];
@@ -104,7 +106,7 @@
                 },
                 { title: '操作', width: 240, templet: '#toolEventDemo' }
             ]],
-            height:600
+            height: 600
         });
 
         // 单元格编辑后的事件
@@ -159,11 +161,51 @@
                         });
                     })
                 });
-            }else if(layEvent === 'run'){
+            } else if (layEvent === 'run') {
                 postRunData(data.domains)
             }
         });
-    });
+
+        // 监听工具条事件
+        table.on('tool(ID-table-demo-parse)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') {
+                layer.confirm('确定删除该项目？', function (index) {
+                    // 执行删除操作#}
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (layEvent === 'run') {
+                // 模拟运行操作
+                layer.msg('执行运行操作');
+            } else if (layEvent === 'message') {
+                // 点击日志按钮，弹出日志窗口
+                layer.open({
+                    type: 1, // page 层类型
+                    area: ['500px', '300px'],
+                    title: '日志信息',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    anim: 0, // 0-6 的动画形式，-1 不开启
+                    content: '<div id="logs-container" style="height: 100%; overflow-y: scroll; padding: 10px; font-family: \'Courier New\', Courier, monospace;"></div>',
+                    success: function (layero, index) {
+                        // 连接到 Socket.IO 服务器
+                        var socket = io();
+                        socket.on('pytest_log', function (data) {
+                            var logElement = document.getElementById('logs-container');
+                            logElement.textContent += data.log;
+                            logElement.scrollTop = logElement.scrollHeight;
+                        });
+                    }
+                });
+            }
+            //});
+
+        });
+    })
 
     //JS
     layui.use(['element', 'layer', 'util'], function () {
@@ -284,18 +326,27 @@
 
     // 请求运行的接口
     async function postRunData(tempDomains) {
-    //    layui.jquery('#runButton').text('运行中...').attr('disabled', true);
-       const res = await axios.post('/run_test_button', tempDomains)
-    //    if(res.status == 200){
-        //   layui.jquery('#runButton').text('运行').attr('disabled', false);
-    //    }
-    }
-
-
-    //页面提交调用接口
-    async function addPageData() {
-        const res = await axios.post('/submit', projectList)
-        console.log("aaaa", res)
+        // 将按钮文本更改为“运行中...”并添加动态加载效果
+        const runButton = document.getElementById('runButton');
+        runButton.classList.add('layui-btn-disabled');
+        runButton.innerHTML = '运行中 <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';
+        try {
+            const res = await axios.post('/run_pytest', tempDomains, {
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            });
+            // 请求成功后将按钮文本恢复为“运行”并移除动态加载效果
+            if (res.status === 200) {
+                runButton.classList.remove('layui-btn-disabled');
+                runButton.innerHTML = '运行';
+            }
+        } catch (error) {
+            // 请求失败也将按钮文本恢复为“运行”并移除动态加载效果
+            console.error('Error running tests:', error);
+            runButton.classList.remove('layui-btn-disabled');
+            runButton.innerHTML = '运行';
+        }
     }
 
 
@@ -327,8 +378,9 @@
     function CloseWin() {
         parent.location.reload(); // 父页面刷新
         var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-        parent.layer.close(index); //再执行关闭 
+        parent.layer.close(index); //再执行关闭
     }
 
 </script>
+
 {% endblock %}
