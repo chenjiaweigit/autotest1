@@ -36,7 +36,7 @@ def transform_data(getdata):
                     item['type'],
                     item['address'],
                     {},  # Convert params to a dictionary
-                    [True if item['success'].lower() == 'true' else True][0],
+                    [True if str(item['success']).lower() == 'true' else True][0],
                     int(item['status']),
                     item['content'],
                 ]
@@ -51,7 +51,7 @@ def transform_data(getdata):
                     item['type'],
                     item['address'],
                     {},  # Convert params to a dictionary
-                    [True if item['success'].lower() == 'true' else True][0],
+                    [True if str(item['success']).lower() == 'true' else True][0],
                     int(item['status']),
                     item['content'],
                     item['notEmpty']
@@ -66,7 +66,7 @@ def transform_data(getdata):
                     item['type'],
                     item['address'],
                     parse_params(item['params']),  # Convert params to a dictionary
-                    [True if item['success'].lower() == 'true' else True][0],
+                    [True if str(item['success']).lower() == 'true' else True][0],
                     int(item['status']),
                     item['content'],
                     item['notEmpty']
@@ -149,7 +149,7 @@ def run_tests():
         # 处理 temp_domains 写入setting.ini配置文件
         if modify_ini_and_write('host', 'api_root_url', temp_domains):
             # 运行pytest框架
-            log.info("="*25 + "开始运行pytest测试框架" + "="*25)
+            log.info("="*25 + "开始运行Pytest测试框架" + "="*25)
             subprocess.run(['python', 'run.py'])
         result = {"status": "success", "message": "Test started"}
         return jsonify(result), 200
