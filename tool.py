@@ -164,5 +164,25 @@ def test_1(module, name, method, url, data, except_pt, except_code, except_resul
 """
     print(script_content)
 
-a = 'test_02:'
-print(a.split(':')[0])
+
+import time,os
+BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+
+
+log_file_path = r'D:\python_project\Flask代码\untitled1\autotest1\log\20240618.log'
+
+def read_log():
+    print(f"日志文件路径：{log_file_path}")
+    with open(log_file_path, 'r') as f:
+        f.seek(0, 2)
+        while True:
+            line = f.readline()
+            if line:
+                print(f"读取到日志：{line.strip()}")
+                # socketio.emit('log', {'message': line.strip()})
+            else:
+                time.sleep(0.1)
+            f.seek(0, 2)  # 将文件指针移动到文件末尾
+
+# directory = 'log'  # 替换为你的目录路径
+

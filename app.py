@@ -14,35 +14,31 @@ from flatform import simple
 app = Flask(__name__)
 app.register_blueprint(simple)
 app.secret_key = 'your_secret_key'  # 设置用于会话加密的密钥，可以随机生成
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # 假设用户名和密码
 USERNAME = 'admin'
 PASSWORD = '123456'
 socketio = SocketIO(app)
 pytest_process = None
 
+
 @app.route('/')
 def index():
     if 'username' in session:
         return render_template('index1.html')  # 登录后显示的页面
-    return redirect(url_for('login'))
+    return redirect(url_for('login'))   # 未登录，重定向到登录页面
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # while True:
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         if username == USERNAME and password == PASSWORD:
-            session['username'] = username
-            return redirect(url_for('index'))
-            # break
+            session['username'] = username  # 将用户名存入会话
+            return redirect(url_for('index'))  # 登录成功，重定向到主页
         else:
-            return 'Invalid username/password'
-            # time.sleep(3)
-            # return render_template('login.html')
-    return render_template('login.html')
+            return render_template('login.html', error='账号/密码错误！')  # 登录失败，显示错误信息
+    return render_template('login.html')  # GET请求，显示登录页面
 
 @app.route('/report', methods=['GET', 'POST'])
 def report():
@@ -81,7 +77,6 @@ def test_page():
     return render_template('index1.html')
 
 
-
 # 以下部分为运行并返回日志给前端调试部分
 
 @app.route('/run_test')
@@ -114,7 +109,7 @@ def start_pytest():
     # 运行pytest框架
     # log.info("=" * 25 + "开始运行pytest测试框架" + "=" * 25)
     # pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    # pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     output, error = pytest_process.communicate()
     print(output, error)
     # return jsonify(result), 200
@@ -141,7 +136,6 @@ def test_connect():
     print('Client connected')
 
 # 以上部分为运行并返回日志给前端调试部分
-
 
 if __name__ == '__main__':
     app.run(debug=True)

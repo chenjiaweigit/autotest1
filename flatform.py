@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # _*_ coding:utf-8 _*_
 import json
+import os
 
 from flask import Blueprint, request, render_template, jsonify
 from flask import Flask,send_from_directory
@@ -84,7 +85,16 @@ def submit():
     """
     objects = request.get_json(force=True)
     log.info("{}".format(objects))
-    data = transform_data(objects)
+    try:
+        data = transform_data(objects)
+    except Exception as e:
+        log.error(e)
+    else:
+        for filename in os.listdir('testcase'):
+            if filename.startswith('test') and filename.endswith('.py'):
+                filepath = os.path.join('testcase', filename)
+                os.remove(filepath)
+                print(f"Deleted: {filepath}")
     log.info(f'解析后的数据==>> {data}')
     # print(data[1]['caseNo'])
     # 定义一个标志变量
