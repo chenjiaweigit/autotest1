@@ -113,12 +113,22 @@ def start_pytest():
     # elif ini_weite_status:
     # 运行pytest框架
     # log.info("=" * 25 + "开始运行pytest测试框架" + "=" * 25)
-    pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    output, error = pytest_process.communicate()
+    print(output, error)
     # return jsonify(result), 200
 
     def emit_logs():
-        for line in iter(pytest_process.stdout.readline, b''):
-            socketio.emit('pytest_log', {'log': line.decode('utf-8')})
+        try:
+            for line in iter(pytest_process.stdout.readline, b''):
+                print(line)
+                try:
+                    socketio.emit('pytest_log', {'log': line.decode('utf-8')})
+                except Exception as e:
+                    print(e)
+        except Exception as e:
+            print(e)
         pytest_process.stdout.close()
         pytest_process.wait()
 
