@@ -24,5 +24,6 @@ if __name__ == '__main__':
     # 支持本地查看allure报告
     '''
     os.system('chomd 777 doubleClickReadReport.sh')
-    os.system('./doubleClickReadReport.sh') 
+    os.system('./doubleClickReadReport.sh') # Mac下执行
+    os.system('.\doubleClickReadReport.sh')  # win下执行
     '''

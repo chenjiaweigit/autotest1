@@ -1,6 +1,6 @@
 {% extends 'parent.html' %}
 {% block title %}
-    自动化测试平台
+自动化测试平台
 {% endblock %}
 {% block body %}
 <div class="project-environment-wrap">
@@ -106,7 +106,7 @@
                 },
                 { title: '操作', width: 240, templet: '#toolEventDemo' }
             ]],
-            height:600
+            height: 600
         });
 
         // 单元格编辑后的事件
@@ -161,50 +161,53 @@
                         });
                     })
                 });
-            }else if(layEvent === 'run'){
+            } else if (layEvent === 'run') {
                 postRunData(data.domains)
+            } else if (layEvent === 'message') {
+                startPytest();
+                // 点击日志按钮，弹出日志窗口
+                layer.open({
+                    type: 1, // page 层类型
+                    area: ['500px', '300px'],
+                    title: '日志信息',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    anim: 0, // 0-6 的动画形式，-1 不开启
+                    // content: '<div id="logs-container" style="height: 100%; overflow-y: scroll; padding: 10px; font-family: \'Courier New\', Courier, monospace;"></div>',
+                    content: '<div id="logs-container" style="height: 100%; padding: 10px; font-family: \'Courier New\', Courier, monospace;"></div>',
+                    success: function (layero, index) {
+                        // 连接到 Socket.IO 服务器
+                        var socket = io();
+                        socket.on('pytest_log', function (data) {
+                            var logElement = document.getElementById('logs-container');
+                            logElement.textContent += data.log;
+                            logElement.scrollTop = logElement.scrollHeight;
+                        });
+                    }
+                });
             }
         });
 
-        // 监听工具条事件
-        {#table.on('tool(ID-table-demo-parse)', function (obj) {#}
-        {#    var data = obj.data;#}
-        {#    var layEvent = obj.event;#}
-        {##}
-        {#    if (layEvent === 'del') {#}
-        {#        layer.confirm('确定删除该项目？', function (index) {#}
-        {#            // 执行删除操作#}
-        {#            obj.del();#}
-        {#            layer.close(index);#}
-        {#        });#}
-        {#    } else if (layEvent === 'run') {#}
-        {#        // 模拟运行操作#}
-        {#        layer.msg('执行运行操作');#}
-        {#    } else if (layEvent === 'message') {#}
-        {#        // 点击日志按钮，弹出日志窗口#}
-        {#        layer.open({#}
-        {#            type: 1, // page 层类型#}
-        {#            area: ['500px', '300px'],#}
-        {#            title: '日志信息',#}
-        {#            shade: 0.6, // 遮罩透明度#}
-        {#            shadeClose: true, // 点击遮罩区域，关闭弹层#}
-        {#            maxmin: true, // 允许全屏最小化#}
-        {#            anim: 0, // 0-6 的动画形式，-1 不开启#}
-        {#            content: '<div id="logs-container" style="height: 100%; overflow-y: scroll; padding: 10px; font-family: \'Courier New\', Courier, monospace;"></div>',#}
-        {#            success: function (layero, index) {#}
-        {#                // 连接到 Socket.IO 服务器#}
-        {#                var socket = io();#}
-        {#                socket.on('pytest_log', function(data) {#}
-        {#                    var logElement = document.getElementById('logs-container');#}
-        {#                    logElement.textContent += data.log;#}
-        {#                    logElement.scrollTop = logElement.scrollHeight;#}
-        {#                });#}
-        {#            }#}
-        {#        });#}
-        {#    }#}
-        //});
+        // // 监听工具条事件
+        // table.on('tool(ID-table-demo-parse)', function (obj) {
+        //     var data = obj.data;
+        //     var layEvent = obj.event;
 
-    });
+        //     if (layEvent === 'del') {
+        //         layer.confirm('确定删除该项目？', function (index) {
+        //             // 执行删除操作#}
+        //             obj.del();
+        //             layer.close(index);
+        //         });
+        //     } else if (layEvent === 'run') {
+        //         // 模拟运行操作
+        //         layer.msg('执行运行操作');
+        //     }
+        //     //});
+
+        // });
+    })
 
     //JS
     layui.use(['element', 'layer', 'util'], function () {
@@ -348,6 +351,14 @@
         }
     }
 
+    async function startPytest(){
+        try {
+            const res = await axios.get('/start_pytest');
+        } catch (error) {
+            console.error('Error starting pytest:', error)
+        }
+    }
+
 
     //提交
     function submit($, params) {
@@ -381,4 +392,5 @@
     }
 
 </script>
+
 {% endblock %}
