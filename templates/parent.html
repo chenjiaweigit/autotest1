@@ -35,7 +35,7 @@
             <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
                 <a href="javascript:;">
                     <img src="//unpkg.com/outeres@0.0.10/img/layui/icon-v2.png" class="layui-nav-img">
-                    tester
+                    管理员
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:;">你的资料</a></dd>
@@ -79,6 +79,21 @@
         <!-- 内容主体区域 -->
          {% block body %}
         {% endblock %}
+        <div class="layui-footer center-footer">
+            <!-- 底部固定区域 -->
+            开发单位：个人开发 毕业设计自动测试系统
+        </div>
+
+        <style>
+        .center-footer {
+            text-align: center;
+            /* 如果希望整个内容块在父元素中垂直居中，可以添加以下代码 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%; /* 确保父元素有高度 */
+        }
+        </style>
     </div>
 </body>
 </html>

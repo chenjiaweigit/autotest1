@@ -1,2 +1,2 @@
 test_01:
- - ["登录", "获取验证码", "get", "/captchaImage", {}, True, 200, "操作成功"]
+ - ["登录模块", "获取验证码", "get", "/captchaImage", {}, True, 201, "操作成功"]

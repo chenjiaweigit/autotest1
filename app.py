@@ -3,8 +3,8 @@ import os,time
 import subprocess
 from flask_socketio import SocketIO, emit
 import threading
-import yaml
-from flask import Flask, render_template, request, session, redirect, url_for,jsonify
+from datetime import datetime, timedelta
+from flask import Flask, render_template, request, session, redirect, url_for,jsonify, make_response
 
 from common.Log import log
 from common.yaml_util1 import modify_ini_and_write
@@ -24,7 +24,12 @@ pytest_process = None
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('index1.html')  # 登录后显示的页面
+        # return render_template('index1.html')  # 登录后显示的页面
+        # 设置名为“username”的cookie，其值来自会话，并设置7天的过期时间
+        expires = datetime.utcnow() + timedelta(minutes=3)
+        response = make_response(render_template('index1.html'))
+        response.set_cookie('username', session['username'], expires=expires)
+        return response
     return redirect(url_for('login'))   # 未登录，重定向到登录页面
 
 
@@ -35,7 +40,11 @@ def login():
         password = request.form['password']
         if username == USERNAME and password == PASSWORD:
             session['username'] = username  # 将用户名存入会话
-            return redirect(url_for('index'))  # 登录成功，重定向到主页
+            # return redirect(url_for('index'))  # 登录成功，重定向到主页
+            expires = datetime.utcnow() + timedelta(minutes=3)
+            response = make_response(redirect(url_for('index')))
+            response.set_cookie('username', username, expires=expires)
+            return response
         else:
             return render_template('login.html', error='账号/密码错误！')  # 登录失败，显示错误信息
     return render_template('login.html')  # GET请求，显示登录页面
@@ -108,10 +117,10 @@ def start_pytest():
     # elif ini_weite_status:
     # 运行pytest框架
     # log.info("=" * 25 + "开始运行pytest测试框架" + "=" * 25)
-    # pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    output, error = pytest_process.communicate()
-    print(output, error)
+    pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # pytest_process = subprocess.Popen(['python', 'run.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    # output, error = pytest_process.communicate()
+    # print(output, error)
     # return jsonify(result), 200
 
     def emit_logs():

@@ -3,7 +3,7 @@
 
 import os
 import re,json
-
+import requests
 from common.Log import log
 from common.set_title import getrootdirectory
 from common.yaml_util1 import read_yaml_token, write_yaml, load_ini
@@ -66,3 +66,71 @@ def keyword_request(name,method,url,data):
     return result
 
 
+def try_except(action, exception_type=Exception, message=""):
+    """
+    尝试执行一个操作，如果发生指定类型的异常，则捕获并处理异常，可选地提供自定义消息
+    """
+    try:
+        action()
+    except exception_type as e:
+        print(f"Exception occurred: {message} - {e}")
+
+
+def assert_equal(actual, expected, message=""):
+    """
+    断言两个值是否相等，并可选地提供自定义消息
+    """
+    assert actual == expected, f"{message}: expected {expected}, but got {actual}"
+
+def assert_not_equal(actual, expected, message=""):
+    """
+    断言两个值是否不相等，并可选地提供自定义消息
+    """
+    assert actual != expected, f"{message}: expected {expected} to be different from {actual}"
+
+def assert_true(condition, message=""):
+    """
+    断言条件是否为 True，并可选地提供自定义消息
+    """
+    assert condition, f"{message}: expected True, but got False"
+
+def assert_false(condition, message=""):
+    """
+    断言条件是否为 False，并可选地提供自定义消息
+    """
+    assert not condition, f"{message}: expected False, but got True"
+
+def verify_response_time(response, max_time):
+    """
+    验证响应时间是否在指定的最大时间范围内
+    """
+    response_time = response.elapsed.total_seconds()
+    assert response_time <= max_time, f"Response time ({response_time} seconds) exceeds maximum allowed time ({max_time} seconds)"
+
+def verify_response_status_code(response, expected_status_code):
+    """
+    验证响应状态码是否与预期的状态码相符
+    """
+    actual_status_code = response.status_code
+    assert actual_status_code == expected_status_code, f"Expected status code {expected_status_code}, but got {actual_status_code}"
+
+def authenticate(session, username, password):
+    """
+    认证关键字：登录认证
+    """
+    login_url = "https://example.com/login"
+    data = {"username": username, "password": password}
+    response = session.post(login_url, data=data)
+    if response.status_code == 200:
+        print("Authentication successful")
+    else:
+        print("Authentication failed")
+
+def create_session():
+    """
+    会话管理关键字：创建会话对象
+    """
+    return requests.Session()
+
+print(assert_equal(2,1,"不相等"))
+# assert_equal(2,1,"不相等")

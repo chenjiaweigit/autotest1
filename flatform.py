@@ -37,7 +37,7 @@ def transform_data(getdata):
                     item['type'],
                     item['address'],
                     {},  # Convert params to a dictionary
-                    [True if str(item['success']).lower() == 'true' else True][0],
+                    [True if str(item['success']).lower() == 'true' else False][0],
                     int(item['status']),
                     item['content'],
                 ]
@@ -52,7 +52,7 @@ def transform_data(getdata):
                     item['type'],
                     item['address'],
                     {},  # Convert params to a dictionary
-                    [True if str(item['success']).lower() == 'true' else True][0],
+                    [True if str(item['success']).lower() == 'true' else False][0],
                     int(item['status']),
                     item['content'],
                     item['notEmpty']
@@ -67,7 +67,7 @@ def transform_data(getdata):
                     item['type'],
                     item['address'],
                     parse_params(item['params']),  # Convert params to a dictionary
-                    [True if str(item['success']).lower() == 'true' else True][0],
+                    [True if str(item['success']).lower() == 'true' else False][0],
                     int(item['status']),
                     item['content'],
                     item['notEmpty']
