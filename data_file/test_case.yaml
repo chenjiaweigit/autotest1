@@ -1,12 +1,2 @@
 test_01:
- - ["登录", "用户登录", "post", "/api/author/login", {'username': 'sny', 'password': 'sny123'}, True, 200, "sny"]
-test_02:
- - ["侵染气象分区", "获取小麦：温度，湿度，降水，太阳辐射数据", "get", "/api/zhibao/v1/disaster/areas/statistics", {'lat': '32.9661343135971', 'lon': '119.463308431282', 'disaster_type': 'chimei', 'feature': ['tave', 'rh', 'apcp', 'ssrd']}, True, 200, "5360"]
-test_03:
- - ["侵染气象分区", "获取水稻：温度，湿度，降水，太阳辐射数据", "get", "/api/zhibao/v1/disaster/areas/statistics", {'lat': '32.9661343135971', 'lon': '119.463308431282', 'disaster_type': 'daowen', 'feature': ['tave', 'rh', 'apcp', 'ssrd']}, True, 200, "4869"]
-test_04:
- - ["病害风险地图", "获取小麦风险分布、指数", "get", "/api/zhibao/v1/disaster/history/risk_map/distributed", {'lat': '32.9661343135971', 'lon': '119.463308431282', 'crop_type': 'wheat'}, True, 200, "测试1"]
-test_05:
- - ["病害风险地图", "水稻=病害风险最高前十", "get", "/api/zhibao/v1/disaster/history/risk_map/top_ten", {'crop_type': 'rice'}, True, 200, "盐城市"]
-test_06:
- - ["病害风险地图", "小麦-病害风险最高前十", "get", "/api/zhibao/v1/disaster/history/risk_map/top_ten", {'crop_type': 'wheat'}, True, 200, "南京市"]
+ - ["登录模块", "获取验证码", "get", "/captchaImage", {}, True, 200, "操作成功"]

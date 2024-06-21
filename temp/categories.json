@@ -1,0 +1,32 @@
+[
+  {
+    "name": "通过",
+    "matchedStatuses": ["passed"]
+  },
+   {
+    "name": "跳过",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Infrastructure problems",
+    "matchedStatuses": ["broken", "failed"],
+    "messageRegex": ".*bye-bye.*"
+  },
+  {
+    "name": "Outdated tests",
+    "matchedStatuses": ["broken"],
+    "traceRegex": ".*FileNotFoundException.*"
+  },
+  {
+    "name": "失败",
+    "matchedStatuses": ["failed"]
+  },
+  {
+    "name": "错误",
+    "matchedStatuses": ["broken"]
+  },
+  {
+    "name": "未知",
+    "matchedStatuses": ["unknown"]
+  }
+]

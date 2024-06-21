@@ -1,0 +1,25 @@
+[ {
+  "values" : [ "win10" ],
+  "name" : "systemVersion"
+}, {
+  "values" : [ "3.6.5" ],
+  "name" : "pythonVersion"
+}, {
+  "values" : [ "2.17.2" ],
+  "name" : "allureVersion"
+}, {
+  "values" : [ "http://test-server.fm-dev.gagogroup.cn:30449" ],
+  "name" : "baseUrl"
+}, {
+  "values" : [ "pytsetdemo" ],
+  "name" : "projectName"
+}, {
+  "values" : [ "CJW" ],
+  "name" : "author"
+}, {
+  "values" : [ "chenjiawei@gagogroup.com" ],
+  "name" : "email"
+}, {
+  "values" : [ "https://blog.csdn.net/qq_41648820" ],
+  "name" : "blog"
+} ]

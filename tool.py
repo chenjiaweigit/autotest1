@@ -186,26 +186,3 @@ def read_log():
 
 # directory = 'log'  # 替换为你的目录路径
 
-def parse_params(param_str):
-    # Remove the curly braces
-    param_str = param_str.strip('{}')
-    # Split the string by semicolon
-    param_pairs = param_str.split(';')
-    # Split each pair by colon and convert to dictionary
-    params = {}
-    for pair in param_pairs:
-        key, value = pair.split(':',1)
-        params[key.strip()] = value.strip()
-    return params
-
-
-def parse_params1(param_str):
-    param_str = param_str.replace('\'', '"')  # Replace single quotes with double quotes if necessary
-    params_list = json.loads(f'[{param_str}]')  # Wrap the string in square brackets to create a list
-    params = {}
-    for param in params_list:
-        params.update(param)
-    return params
-
-# print(parse_params1('{"username":"sny","password":"sny123","username1":"sny","password":"sny123","username2":"sny","password":"sny123"}'))
-

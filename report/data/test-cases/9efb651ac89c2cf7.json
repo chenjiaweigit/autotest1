@@ -1,0 +1,193 @@
+{
+  "uid" : "9efb651ac89c2cf7",
+  "name" : "获取验证码-预期成功",
+  "fullName" : "testcase.test_login.Test_login#test_login",
+  "historyId" : "6baaf4daccd45da38ed3e6f98874af74",
+  "time" : {
+    "start" : 1718972393891,
+    "stop" : 1718972396412,
+    "duration" : 2521
+  },
+  "description" : "该用例是针对 监控\"获取验证码\"功能是否正常 场景的测试",
+  "descriptionHtml" : "<p>该用例是针对 监控&quot;获取验证码&quot;功能是否正常 场景的测试</p>\n",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "newBroken" : false,
+  "newPassed" : false,
+  "retriesCount" : 0,
+  "retriesStatusChange" : false,
+  "beforeStages" : [ {
+    "name" : "_session_faker",
+    "time" : {
+      "start" : 1718972393671,
+      "stop" : 1718972393888,
+      "duration" : 217
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "execute_database_sql",
+    "time" : {
+      "start" : 1718972393888,
+      "stop" : 1718972393889,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "该用例是针对 监控\"获取验证码\"功能是否正常 场景的测试",
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "步骤1 ==>> 登录用户：{}",
+      "time" : {
+        "start" : 1718972393891,
+        "stop" : 1718972393891,
+        "duration" : 0
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : false,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "832d5e630b554fef",
+      "name" : "log",
+      "source" : "832d5e630b554fef.txt",
+      "type" : "text/plain",
+      "size" : 9533
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 1,
+    "attachmentsCount" : 1,
+    "shouldDisplayMessage" : false
+  },
+  "afterStages" : [ {
+    "name" : "execute_database_sql::0",
+    "time" : {
+      "start" : 1718972396419,
+      "stop" : 1718972396420,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "登录模块模块"
+  }, {
+    "name" : "story",
+    "value" : "用例--/获取验证码/--预期成功"
+  }, {
+    "name" : "epic",
+    "value" : "针对单个接口的测试"
+  }, {
+    "name" : "severity",
+    "value" : "normal"
+  }, {
+    "name" : "tag",
+    "value" : "run(order=1)"
+  }, {
+    "name" : "tag",
+    "value" : "smoke"
+  }, {
+    "name" : "parentSuite",
+    "value" : "testcase"
+  }, {
+    "name" : "suite",
+    "value" : "test_login"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_login"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-MGKE1TG"
+  }, {
+    "name" : "thread",
+    "value" : "24612-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "testcase.test_login"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ {
+    "name" : "data",
+    "value" : "{}"
+  }, {
+    "name" : "except_code",
+    "value" : "200"
+  }, {
+    "name" : "except_pt",
+    "value" : "True"
+  }, {
+    "name" : "except_result",
+    "value" : "'操作成功'"
+  }, {
+    "name" : "method",
+    "value" : "'get'"
+  }, {
+    "name" : "module",
+    "value" : "'登录模块'"
+  }, {
+    "name" : "name",
+    "value" : "'获取验证码'"
+  }, {
+    "name" : "url",
+    "value" : "'/captchaImage'"
+  } ],
+  "links" : [ {
+    "name" : "点击，跳转到对应用例的链接地址",
+    "url" : "http://localhost:8080/",
+    "type" : "test_case"
+  }, {
+    "name" : "点击，跳转到对应BUG的链接地址",
+    "url" : "http://localhost:8080/job/pytest_demo1/",
+    "type" : "issue"
+  } ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "通过",
+      "matchedStatuses" : [ "passed" ],
+      "flaky" : false
+    } ],
+    "tags" : [ "run(order=1)", "smoke" ]
+  },
+  "source" : "9efb651ac89c2cf7.json",
+  "parameterValues" : [ "{}", "200", "True", "'操作成功'", "'get'", "'登录模块'", "'获取验证码'", "'/captchaImage'" ]
+}
