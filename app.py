@@ -4,7 +4,7 @@ import subprocess
 from flask_socketio import SocketIO, emit
 import threading
 from datetime import datetime, timedelta
-from flask import Flask, render_template, request, session, redirect, url_for,jsonify, make_response
+from flask import Flask, render_template, request, session, redirect, url_for,jsonify, make_response, flash
 
 from common.Log import log
 from common.yaml_util1 import modify_ini_and_write
@@ -44,6 +44,7 @@ def login():
             expires = datetime.utcnow() + timedelta(minutes=3)
             response = make_response(redirect(url_for('index')))
             response.set_cookie('username', username, expires=expires)
+            flash("登录成功！")
             return response
         else:
             return render_template('login.html', error='账号/密码错误！')  # 登录失败，显示错误信息

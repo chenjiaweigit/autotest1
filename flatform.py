@@ -186,7 +186,6 @@ def static_page():
     return send_from_directory('static', 'static_page.html')
 
 
-
 @simple.route('/run_pytest', methods=['POST'])
 def run_tests():
 

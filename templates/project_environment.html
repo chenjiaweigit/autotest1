@@ -47,7 +47,7 @@
     </div>
 </div>
 <script type="text/html" id="toolEventDemo">
-    <a id="runButton" class="layui-btn layui-btn-xs" lay-event="run">运行</a>
+    <a id="runButton" class="layui-btn layui-btn-xs run_test" lay-event="run">运行</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="message">日志</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -162,7 +162,8 @@
                     })
                 });
             } else if (layEvent === 'run') {
-                postRunData(data.domains)
+                {#postRunData(data.domains)#}
+                postRunData(data.domains,index)
             } else if (layEvent === 'message') {
                 startPytest();
                 // 点击日志按钮，弹出日志窗口
@@ -327,9 +328,38 @@
     })
 
     // 请求运行的接口
-    async function postRunData(tempDomains) {
+    {#async function postRunData(tempDomains) {#}
+    {#    // 将按钮文本更改为“运行中...”并添加动态加载效果#}
+    {#    const runButton = document.getElementById('runButton');#}
+    {#    runButton.classList.add('layui-btn-disabled');#}
+    {#    runButton.innerHTML = '运行中 <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';#}
+    {#    try {#}
+    {#        const res = await axios.post('/run_pytest', tempDomains, {#}
+    {#            headers: {#}
+    {#                'Content-Type': 'text/plain'#}
+    {#            }#}
+    {#        });#}
+    {#        // 请求成功后将按钮文本恢复为“运行”并移除动态加载效果#}
+    {#        if (res.status === 200) {#}
+    {#            runButton.classList.remove('layui-btn-disabled');#}
+    {#            runButton.innerHTML = '运行';#}
+    {#        }#}
+    {#    } catch (error) {#}
+    {#        // 请求失败也将按钮文本恢复为“运行”并移除动态加载效果#}
+    {#        console.error('Error running tests:', error);#}
+    {#        runButton.classList.remove('layui-btn-disabled');#}
+    {#        runButton.innerHTML = '运行';#}
+    {#    }#}
+    {#}#}
+
+    // 请求运行的接口
+    async function postRunData(tempDomains, index) {
+        document.querySelectorAll('.run_test').forEach(i => {
+            i.classList.remove('layui-btn-disabled');
+            i.innerHTML = '运行';
+        })
         // 将按钮文本更改为“运行中...”并添加动态加载效果
-        const runButton = document.getElementById('runButton');
+        const runButton = document.querySelectorAll('.run_test')[index];
         runButton.classList.add('layui-btn-disabled');
         runButton.innerHTML = '运行中 <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';
         try {
@@ -350,7 +380,6 @@
             runButton.innerHTML = '运行';
         }
     }
-
     async function startPytest(){
         try {
             const res = await axios.get('/start_pytest');
