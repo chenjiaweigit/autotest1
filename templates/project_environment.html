@@ -148,7 +148,7 @@
             if (layEvent === 'del') { //删除
                 layer.confirm('确定删除吗？', function (index) {
                     obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
-                    const targetIndex = projectList.findIndex(i => i.id === obj.id)
+                    const targetIndex = projectList.findIndex(i => i.id === obj.data.id)
                     projectList.splice(targetIndex, 1)
                     localStorage.setItem('projectList', JSON.stringify(projectList))
                     layer.close(index);

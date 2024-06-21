@@ -230,7 +230,7 @@
                 { field: 'templateName', title: '模块名称', width: 150,style: 'overflow:hidden' },
                 { field: 'caseName', title: '用例名称', width: 120,style: 'overflow:hidden' },
                 { field: 'type', title: '请求方式', width: 120 },
-                { field: 'address', title: '请求地址',style: 'overflow:hidden' },
+                { field: 'address', title: '请求地址',style: 'overflow:hidden',width: 150 },
                 { field: 'params', title: '请求参数', width: 120,style: 'overflow:hidden' },
                 { field: 'success', title: '成功断言', width: 120,style: 'overflow:hidden' },
                 { field: 'status', title: '状态码断言', width: 120 ,style: 'overflow:hidden'},
@@ -256,7 +256,7 @@
             if (layEvent === 'del') { //删除
                 layer.confirm('确定删除吗？', function (index) {
                     obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
-                    const targetIndex = dataList.findIndex(i=> i.id === obj.id)
+                    const targetIndex = dataList.findIndex(i=> i.id === obj.data.id)
                     dataList.splice(targetIndex,1)
                     localStorage.setItem('dataList', JSON.stringify(dataList))
                     layer.close(index);
