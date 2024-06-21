@@ -1,0 +1,30 @@
+{
+  "uid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+  "name" : "timeline",
+  "children" : [ {
+    "name" : "DESKTOP-MGKE1TG",
+    "children" : [ {
+      "name" : "24612-MainThread",
+      "children" : [ {
+        "name" : "获取验证码-预期成功",
+        "uid" : "9efb651ac89c2cf7",
+        "parentUid" : "3160e0805445da90a0ecbd40d9eef626",
+        "status" : "passed",
+        "time" : {
+          "start" : 1718972393891,
+          "stop" : 1718972396412,
+          "duration" : 2521
+        },
+        "flaky" : false,
+        "newFailed" : false,
+        "newPassed" : false,
+        "newBroken" : false,
+        "retriesCount" : 0,
+        "retriesStatusChange" : false,
+        "parameters" : [ "{}", "200", "True", "'操作成功'", "'get'", "'登录模块'", "'获取验证码'", "'/captchaImage'" ]
+      } ],
+      "uid" : "3160e0805445da90a0ecbd40d9eef626"
+    } ],
+    "uid" : "64fa8ecdbc0e8b58270e95586dbf4b83"
+  } ]
+}

@@ -1,0 +1,16 @@
+.side-nav__brand {
+  /*background: url('custom-logo.svg') no-repeat left center !important;*/
+  background: url('logo1.png') no-repeat left center !important;
+  margin-left: 10px;
+  height: 60px;
+
+}
+
+.side-nav__brand span{
+    display: none;
+}
+.side-nav__brand:after{
+    content: "测试平台";    /*这是的内容对应的是我logo后面的内容，在接下来的截图中可以看到，如果不写这个样式，默认的就是allure*/
+    margin-left: 22px;
+  
+}

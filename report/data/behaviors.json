@@ -1,0 +1,34 @@
+{
+  "uid" : "b1a8273437954620fa374b796ffaacdd",
+  "name" : "behaviors",
+  "children" : [ {
+    "name" : "针对单个接口的测试",
+    "children" : [ {
+      "name" : "登录模块模块",
+      "children" : [ {
+        "name" : "用例--/获取验证码/--预期成功",
+        "children" : [ {
+          "name" : "获取验证码-预期成功",
+          "uid" : "9efb651ac89c2cf7",
+          "parentUid" : "16918c54f8f57ae0963649ee62465d56",
+          "status" : "passed",
+          "time" : {
+            "start" : 1718972393891,
+            "stop" : 1718972396412,
+            "duration" : 2521
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "newPassed" : false,
+          "newBroken" : false,
+          "retriesCount" : 0,
+          "retriesStatusChange" : false,
+          "parameters" : [ "{}", "200", "True", "'操作成功'", "'get'", "'登录模块'", "'获取验证码'", "'/captchaImage'" ]
+        } ],
+        "uid" : "16918c54f8f57ae0963649ee62465d56"
+      } ],
+      "uid" : "0aadf83af127fcd7092a7c48678d0154"
+    } ],
+    "uid" : "6b8f2f790c75a706c4fafda03d54caa6"
+  } ]
+}
