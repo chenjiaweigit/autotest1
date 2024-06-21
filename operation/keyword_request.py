@@ -132,5 +132,8 @@ def create_session():
     """
     return requests.Session()
 
+<<<<<<< HEAD
 # print(assert_equal(2,1,"不相等"))
 # assert_equal(2,1,"不相等")
+=======
+>>>>>>> 89a6c35cfd75f5df6b7f4f453bc1532506d74914
