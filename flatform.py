@@ -12,7 +12,6 @@ from common.yaml_util1 import modify_ini_and_write
 simple = Blueprint('simple', __name__, template_folder='templates')
 
 def parse_params(param_str):
-    """
     # Remove the curly braces
     param_str = param_str.strip('{}')
     # Split the string by semicolon
@@ -20,14 +19,8 @@ def parse_params(param_str):
     # Split each pair by colon and convert to dictionary
     params = {}
     for pair in param_pairs:
-        key, value = pair.split(':', 1)
+        key, value = pair.split(':')
         params[key.strip()] = value.strip()
-    return params"""
-    param_str = param_str.replace('\'', '"')  # Replace single quotes with double quotes if necessary
-    params_list = json.loads(f'[{param_str}]')  # Wrap the string in square brackets to create a list
-    params = {}
-    for param in params_list:
-        params.update(param)
     return params
 
 
@@ -63,20 +56,6 @@ def transform_data(getdata):
                     int(item['status']),
                     item['content'],
                     item['notEmpty']
-                ]
-            ]
-        elif item['notEmpty'].lower() == "none":
-            transformed_item = [
-                f"{item['caseNo']}:",
-                [
-                    item['templateName'],
-                    item['caseName'],
-                    item['type'],
-                    item['address'],
-                    parse_params(item['params']),
-                    [True if str(item['success']).lower() == 'true' else False][0],
-                    int(item['status']),
-                    item['content'],
                 ]
             ]
         else:
@@ -116,7 +95,7 @@ def submit():
                 filepath = os.path.join('testcase', filename)
                 os.remove(filepath)
                 print(f"Deleted: {filepath}")
-        log.info(f'解析后的数据==>> {data}')
+    log.info(f'解析后的数据==>> {data}')
     # print(data[1]['caseNo'])
     # 定义一个标志变量
     is_first_write = True

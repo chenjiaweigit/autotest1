@@ -27,7 +27,7 @@ def index():
         # return render_template('index1.html')  # 登录后显示的页面
         # 设置名为“username”的cookie，其值来自会话，并设置7天的过期时间
         expires = datetime.utcnow() + timedelta(minutes=3)
-        response = make_response(render_template('index.html'))
+        response = make_response(render_template('index1.html'))
         response.set_cookie('username', session['username'], expires=expires)
         return response
     return redirect(url_for('login'))   # 未登录，重定向到登录页面
