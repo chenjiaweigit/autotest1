@@ -121,6 +121,7 @@ def submit():
                 file.write(yaml_str)
             # 只在第一次写入时使用覆盖写入模式
             is_first_write = False
+            # 数据写入成功新增测试脚本
             generate_test_script(data[case_list][0], case_list)
     except Exception as e:
         log.error("{}".format(e))
@@ -206,7 +207,7 @@ def run_tests():
         if modify_ini_and_write('host', 'api_root_url', temp_domains):
             # 运行pytest框架
             log.info("="*25 + "开始运行Pytest测试框架" + "="*25)
-            subprocess.run(['python', 'run.py'])
+            # subprocess.run(['python', 'run.py'])
         result = {"status": "success", "message": "Test started"}
         return jsonify(result), 200
     except ValueError as ve:

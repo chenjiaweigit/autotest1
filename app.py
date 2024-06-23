@@ -5,21 +5,76 @@ from flask_socketio import SocketIO, emit
 import threading
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, session, redirect, url_for,jsonify, make_response, flash
+import locale
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate    #就是将新增的字段合并到数据库当中
 
-from common.Log import log
-from common.yaml_util1 import modify_ini_and_write
+locale.setlocale(locale.LC_CTYPE,"chinese")
 from flatform import simple
 
 
 app = Flask(__name__)
 app.register_blueprint(simple)
 app.secret_key = 'your_secret_key'  # 设置用于会话加密的密钥，可以随机生成
-# 假设用户名和密码
-USERNAME = 'admin'
-PASSWORD = '123456'
 socketio = SocketIO(app)
 pytest_process = None
 
+def connect_tadabase():
+    host = "39.100.94.179"
+    port = 15432
+    user = "postgres"
+    password = "BHU*9ol."
+    database = "test"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{user}:{password}@{host}:{port}/{database}"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    # 在app.config中设置好连接数据库的信息，然后使用SQLAlchemy(db)创建一个db对象，会自动读取app.config中的信息
+    db = SQLAlchemy(app)
+    return db
+db = connect_tadabase()
+# 测试是否连接数据库  ?charset=utf8mb4
+# with app.app_context():    #处理上下文需要加这个，不然会报错
+#     with db.engine.connect() as conn:
+#         rs = conn.execute("select 1")
+#         print(rs.fetchone())
+
+migrate = Migrate(app, db)
+
+# 3. 定义与数据库表的映射类（无需创建表，只是定义映射）
+class Test(db.Model):
+    __tablename__ = 'test_case'
+    id = db.Column(db.Integer, primary_key=True)
+    module = db.Column(db.String)
+    name = db.Column(db.String)
+
+class User(db.Model):
+    __tablename__ = 'user'
+    ID = db.Column(db.Integer, primary_key=True)
+    USERNAME = db.Column(db.String)
+    PASSWORD = db.Column(db.String)
+
+@app.route('/user/query')
+def query_user():
+    # get查找，根据主键查找
+    # user = User_table.query.get(1)
+    # print(f"{user.ID}:{user.USERNAME}:{user.PASSWORD}")
+    # filter_by查找
+    # users = User_table.query.filter_by(USERNAME="法外狂徒李四")
+    # users = User_table.query.all()  # 获取全部数据
+    # users = User_table.query.filter(User_table.USERNAME.like("%张三%")).all()    # 模糊查询
+    # users = User_table.query.filter(User_table.USERNAME.contains("李四")).all()   # 包含关系
+    # for user in users:
+    #     print(user.ID,user.USERNAME,user.PASSWORD)
+    users = User.query.filter(User.USERNAME.like("%admin%")).first()
+    # users = Test.query.all()
+    # for user in users:
+    #     print(user.ID)
+    # print(users.ID,users.USERNAME,users.PASSWORD)
+    # return "数据查找成功！"
+    # results = User.query.all()
+    # for user in results:
+    print(users.USERNAME, users.PASSWORD)
+    # return ''.join([f"ID: {row.id}, Name: {row.name}<br>" for row in results])
+    return ''.join(f"账号: {users.USERNAME}, 密码: {users.PASSWORD}<br>")
 
 @app.route('/')
 def index():
@@ -35,10 +90,12 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    users = User.query.filter(User.USERNAME.like("%admin%")).first()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username == USERNAME and password == PASSWORD:
+        if username == users.USERNAME and password == users.PASSWORD:
+            print(users.USERNAME, users.PASSWORD)
             session['username'] = username  # 将用户名存入会话
             # return redirect(url_for('index'))  # 登录成功，重定向到主页
             expires = datetime.utcnow() + timedelta(minutes=3)
@@ -62,6 +119,12 @@ def test_case():
 @app.route('/project_environment')
 def project_environment():
     return render_template('project_environment.html')
+
+
+@app.route('/database_environment')
+def database_environment():
+    return render_template('databese_environment.html')
+
 
 @app.route('/test_report')
 def test_report():

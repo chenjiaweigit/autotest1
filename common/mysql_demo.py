@@ -19,16 +19,16 @@ pg_data = load_ini(data_file_path)['postgresql']
 #     "database": data["MYSQL_DB"]
 # }
 
-mysql_host = mysql_data["MYSQL_HOST"]
-mysql_port = int(mysql_data["MYSQL_PORT"])
-mysql_username = mysql_data["MYSQL_USER"]
-mysql_password = mysql_data["MYSQL_PASSWD"]
-mysql_database = mysql_data["MYSQL_DB"]
-pg_host = pg_data["PG_HOST"]
-pg_port = int(pg_data["PG_PORT"])
-pg_username = pg_data["PG_USER"]
-pg_password = pg_data["PG_PASSWD"]
-pg_database = pg_data["PG_DB"]
+mysql_host = mysql_data["mysql_host"]
+mysql_port = int(mysql_data["mysql_port"])
+mysql_username = mysql_data["mysql_user"]
+mysql_password = mysql_data["mysql_passwd"]
+mysql_database = mysql_data["mysql_db"]
+pg_host = pg_data["pg_host"]
+pg_port = int(pg_data["pg_port"])
+pg_username = pg_data["pg_user"]
+pg_password = pg_data["pg_passwd"]
+pg_database = pg_data["pg_db"]
 
 
 def my_sql_database():
@@ -60,6 +60,10 @@ def pg_sql_database():
             database=pg_database
     )
     cur = conn.cursor()
-    sql = "select area from b_lands_attribute_2021 bla where id = '20545521'"
+    sql = "select module, name, method, address_url, data, except_pt," \
+          " except_code, except_result, non_null_assert from test_case"
     cur.execute(sql)
-    print(cur.fetchall()) #打印结果
+    # print(cur.fetchall()) #打印结果
+    return cur.fetchall()
+
+# print(pg_sql_database())

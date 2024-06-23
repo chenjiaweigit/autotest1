@@ -1,0 +1,425 @@
+{% extends 'parent.html' %}
+{% block title %}
+自动化测试平台
+{% endblock %}
+{% block body %}
+<div class="project-environment-wrap">
+    <div class="layui-btn-container" style="margin-top: 20px; padding-left: 20px">
+        <button class="layui-btn layui-btn-sm" lay-on="add-data">新增</button>
+    </div>
+    <div style="width: 100%; height: calc(100% - 60px);">
+        <table class="layui-hide" id="ID-table-demo-parse"></table>
+    </div>
+
+    <div id="add-main" style="display: none;">
+        <form class="layui-form" id="add-form" action="">
+            <div class="layui-form-item center">
+                <label class="layui-form-label" style="width: 100px">项目名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="projectName" required value="" style="width: 240px" lay-verify="required"
+                        placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">环境地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="domains" required style="width: 240px" lay-verify="required"
+                        placeholder="请输入环境地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">环境&emsp;</label>
+                <div class="layui-input-block">
+                    <select name="environment" required lay-verify="required" class="layui-border select-demo-primary"
+                        lay-ignore style="width: 240px; height: 38px;">
+                        <option value="正式环境">正式环境</option>
+                        <option value="测试环境">测试环境</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="closeBtn">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/html" id="toolEventDemo">
+    <a id="runButton" class="layui-btn layui-btn-xs run_test" lay-event="run">运行</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="message">日志</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script src="static/layui/2.9.10/layui/layui.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.2/axios.js"></script>
+<!-- 引入 Socket.IO -->
+<script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+<script>
+    const { v4: uuidv4 } = uuid;
+    var projectList = [];
+    var rowData = {};
+    var selectOptions = [
+        { value: '正式环境', text: '正式环境' },
+        { value: '测试环境', text: '测试环境' },
+    ];
+    const tempDataList = localStorage.getItem('projectList')
+    if (tempDataList === null) {
+        localStorage.setItem('projectList', JSON.stringify(projectList))
+    } else {
+        const tempDataList1 = JSON.parse(tempDataList)
+        projectList = tempDataList1
+    }
+
+    layui.use('table', function () {
+        var table = layui.table;
+
+        // 渲染
+        table.render({
+            elem: '#ID-table-demo-parse',
+            // url: 'static/data.json',
+            data: projectList,
+            page: true,
+            response: {
+                statusCode: 200   // 重新规定成功的状态码为 200，table 组件默认为 0
+            },
+            // 将原始数据解析成 table 组件所规定的数据格式
+            parseData: function (res) {
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            },
+            cols: [[
+                { field: 'id', title: 'id', width: 150, style: 'overflow:hidden' },
+                { field: 'projectName', title: '项目名称', width: 120, edit: 'text' },
+                { field: 'domains', title: '环境地址', edit: 'text', style: 'overflow:hidden' },
+                // { field: 'environment', title: '环境', width: 150, templet: '#TPL-select-primary' },
+                {
+                    field: 'environment', title: '环境', width: 150, templet: function (d) {
+                        return '<select lay-filter="editStateS" name="environment" id="' + d.id + '"><option value="正式环境" ' + (d.environment === '正式环境' ? 'selected' : '') + '>正式环境</option><option value="测试环境" ' + (d.environment === '测试环境' ? 'selected' : '') + '>测试环境</option></select>';
+                    }
+                },
+                { title: '操作', width: 240, templet: '#toolEventDemo' }
+            ]],
+            height: 600
+        });
+
+        // 单元格编辑后的事件
+        table.on('edit(ID-table-demo-parse)', function (obj) {
+            var field = obj.field; // 得到修改的字段
+            var value = obj.value // 得到修改后的值
+            var oldValue = obj.oldValue // 得到修改前的值 -- v2.8.0 新增
+            var data = obj.data // 得到所在行所有键值
+            var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.0 新增
+
+            // 值的校验
+            if (value.replace(/\s/g, '') === '') {
+                layer.tips('值不能为空', this, { tips: 1 });
+                return obj.reedit(); // 重新编辑 -- v2.8.0 新增
+            }
+            // 编辑后续操作，如提交更新请求，以完成真实的数据更新
+            // …
+            const targetIndex = projectList.findIndex(i => i.id === obj.id)
+            projectList[targetIndex] = obj
+            localStorage.setItem('projectList', JSON.stringify(projectList))
+            table.reloadData('ID-table-demo-parse', {
+                scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+            });
+            layer.msg('编辑成功！')
+        });
+
+        // 单元格工具事件
+        table.on('tool(ID-table-demo-parse)', function (obj) {
+            var data = obj.data; // 得到当前行数据
+            var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
+            var index = obj.index; // 得到当前行索引
+            var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
+            var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
+            var options = obj.config; // 获取当前表格基础属性配置项
+            var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.3 新增
+            console.log(obj); // 查看对象所有成员
+
+            // 根据 lay-event 的值执行不同操作
+            if (layEvent === 'del') { //删除
+                layer.confirm('确定删除吗？', function (index) {
+                    obj.del(); // 删除对应行（tr）的 DOM 结构，并更新缓存
+                    const targetIndex = projectList.findIndex(i => i.id === obj.data.id)
+                    projectList.splice(targetIndex, 1)
+                    localStorage.setItem('projectList', JSON.stringify(projectList))
+                    layer.close(index);
+                    layer.msg('删除成功！', { icon: 1 }, function (index) {
+                        // location.reload();
+                        // CloseWin();
+                        // 让table重新渲染
+                        table.reloadData('ID-table-demo-parse', {
+                            scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                        });
+                    })
+                });
+            } else if (layEvent === 'run') {
+                {#postRunData(data.domains)#}
+                postRunData(data.domains,index)
+            } else if (layEvent === 'message') {
+                startPytest();
+                // 点击日志按钮，弹出日志窗口
+                layer.open({
+                    type: 1, // page 层类型
+                    area: ['500px', '300px'],
+                    title: '日志信息',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    anim: 0, // 0-6 的动画形式，-1 不开启
+                    // content: '<div id="logs-container" style="height: 100%; overflow-y: scroll; padding: 10px; font-family: \'Courier New\', Courier, monospace;"></div>',
+                    content: '<div id="logs-container" style="height: 100%; padding: 10px; font-family: \'Courier New\', Courier, monospace;"></div>',
+                    success: function (layero, index) {
+                        // 连接到 Socket.IO 服务器
+                        var socket = io();
+                        socket.on('pytest_log', function (data) {
+                            var logElement = document.getElementById('logs-container');
+                            logElement.textContent += data.log;
+                            logElement.scrollTop = logElement.scrollHeight;
+                        });
+                    }
+                });
+            }
+        });
+
+        // // 监听工具条事件
+        // table.on('tool(ID-table-demo-parse)', function (obj) {
+        //     var data = obj.data;
+        //     var layEvent = obj.event;
+
+        //     if (layEvent === 'del') {
+        //         layer.confirm('确定删除该项目？', function (index) {
+        //             // 执行删除操作#}
+        //             obj.del();
+        //             layer.close(index);
+        //         });
+        //     } else if (layEvent === 'run') {
+        //         // 模拟运行操作
+        //         layer.msg('执行运行操作');
+        //     }
+        //     //});
+
+        // });
+    })
+
+    //JS
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var util = layui.util;
+        var $ = layui.$;
+
+        // 事件
+        util.on('lay-on', {
+            'add-data': function () {
+                layer.open({
+                    type: 1,
+                    shade: 0,
+                    // area: ['420px', '240px'], // 宽高
+                    title: "新建项目环境配置",
+                    // closeBtn: false,
+                    // shift: 2,
+                    area: ['400px', '300px'],
+                    // shadeClose: true,
+                    // btn: ['新增', '取消'],
+                    // btnAlign: 'c',
+                    content: $("#add-main"),
+                    success: function (layero, index) { },
+                    yes: function () {
+                    }
+                });
+            },
+            'page-submit-data': function () {
+                console.log("提交提交", projectList)
+                addPageData()
+            }
+        })
+
+        //头部事件
+        util.event('lay-header-event', {
+            menuLeft: function (othis) { // 左侧菜单事件
+                layer.msg('展开左侧菜单的操作', { icon: 0 });
+            },
+            menuRight: function () {  // 右侧菜单事件
+                layer.open({
+                    type: 1,
+                    title: '更多',
+                    content: '<div style="padding: 15px;">处理右侧面板的操作</div>',
+                    area: ['260px', '100%'],
+                    offset: 'rt', // 右上角
+                    anim: 'slideLeft', // 从右侧抽屉滑出
+                    shadeClose: true,
+                    scrollbar: false
+                });
+            }
+        });
+    });
+
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form;
+        //表单验证
+        // form.verify({
+        //     firstpwd: [/(.+){6,12}$/, '密码必须6到12位'],
+        //     secondpwd: function (value) {
+        //         if (value != $("#firstpwd").val()) {
+        //             $("#secondpwd").val("");
+        //             return '确认密码与密码不一致';
+        //         }
+        //     },
+        //     productCodes: function (value) {
+        //         if (value == '') {
+        //             return "请选择系统分配";
+        //         }
+        //     },
+        //     sysqx: function (value) {
+        //         if (value == '') {
+        //             return "请选择权限";
+        //         }
+        //     }
+        // });
+        //监听下拉框编辑
+        form.on('select(editStateS)', function (data) {
+            //获取当前行tr对象
+            var elem = data.othis.parents('tr');
+            //第一列的值是Guid，取guid来判断
+            // var id = elem.first().find('td').eq(1).text();
+            var id = elem.first().find('td').eq(0).text();
+            //选择的select对象值；
+            var selectValue = data.value;
+            //这里的dataList是我自定义的table中数据的缓存数据，下拉数据修改时赋值到这一行缓存数据
+            for (i = 0; i < projectList.length; i++) {
+                if (projectList[i].id == id) {
+                    projectList[i].environment = selectValue; //更新被修改的行数据
+                    localStorage.setItem('projectList', JSON.stringify(projectList))
+                    layui.table.reloadData('ID-table-demo-parse', {
+                        scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
+                    });
+                    layer.msg('编辑成功！')
+                }
+            }
+        })
+
+        //新增提交监听事件
+        form.on('submit(save)', function (data) {
+            params = data.field;
+            submit($, params);
+            return false;
+        })
+        //编辑
+        form.on('submit(editSave)', function (data) {
+            params = data.field;
+            editSubmit($, params);
+            return false;
+        })
+        var obj = document.getElementById('closeBtn');
+        obj.addEventListener('click', function cancel() {
+            CloseWin();
+        });
+    })
+
+    // 请求运行的接口
+    {#async function postRunData(tempDomains) {#}
+    {#    // 将按钮文本更改为“运行中...”并添加动态加载效果#}
+    {#    const runButton = document.getElementById('runButton');#}
+    {#    runButton.classList.add('layui-btn-disabled');#}
+    {#    runButton.innerHTML = '运行中 <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';#}
+    {#    try {#}
+    {#        const res = await axios.post('/run_pytest', tempDomains, {#}
+    {#            headers: {#}
+    {#                'Content-Type': 'text/plain'#}
+    {#            }#}
+    {#        });#}
+    {#        // 请求成功后将按钮文本恢复为“运行”并移除动态加载效果#}
+    {#        if (res.status === 200) {#}
+    {#            runButton.classList.remove('layui-btn-disabled');#}
+    {#            runButton.innerHTML = '运行';#}
+    {#        }#}
+    {#    } catch (error) {#}
+    {#        // 请求失败也将按钮文本恢复为“运行”并移除动态加载效果#}
+    {#        console.error('Error running tests:', error);#}
+    {#        runButton.classList.remove('layui-btn-disabled');#}
+    {#        runButton.innerHTML = '运行';#}
+    {#    }#}
+    {#}#}
+
+    // 请求运行的接口
+    async function postRunData(tempDomains, index) {
+        document.querySelectorAll('.run_test').forEach(i => {
+            i.classList.remove('layui-btn-disabled');
+            i.innerHTML = '运行';
+        })
+        // 将按钮文本更改为“运行中...”并添加动态加载效果
+        const runButton = document.querySelectorAll('.run_test')[index];
+        runButton.classList.add('layui-btn-disabled');
+        runButton.innerHTML = '运行中 <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';
+        try {
+            const res = await axios.post('/run_pytest', tempDomains, {
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            });
+            // 请求成功后将按钮文本恢复为“运行”并移除动态加载效果
+            if (res.status === 200) {
+                runButton.classList.remove('layui-btn-disabled');
+                runButton.innerHTML = '运行';
+            }
+        } catch (error) {
+            // 请求失败也将按钮文本恢复为“运行”并移除动态加载效果
+            console.error('Error running tests:', error);
+            runButton.classList.remove('layui-btn-disabled');
+            runButton.innerHTML = '运行';
+        }
+    }
+    async function startPytest(){
+        try {
+            const res = await axios.get('/start_pytest');
+        } catch (error) {
+            console.error('Error starting pytest:', error)
+        }
+    }
+
+
+    //提交
+    function submit($, params) {
+        const id = uuidv4()
+        params.id = id
+        projectList.push(params)
+        localStorage.setItem('projectList', JSON.stringify(projectList))
+        layer.msg('新增成功！', { icon: 1 }, function (index) {
+            location.reload();
+            CloseWin();
+        })
+
+    }
+    //编辑提交
+    function editSubmit($, params) {
+        const id = params.id;
+        let targetIndex = projectList.findIndex(i => i.id === id);
+        projectList[targetIndex] = params
+        localStorage.setItem('projectList', JSON.stringify(projectList))
+        layer.msg('编辑成功！', { icon: 1 }, function (index) {
+            location.reload();
+            CloseWin();
+        })
+
+    }
+    //关闭页面
+    function CloseWin() {
+        parent.location.reload(); // 父页面刷新
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+
+</script>
+
+{% endblock %}
